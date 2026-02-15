@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lamhub – Where Groups Order Smarter</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="status-time">9:41</span>
+            <div class="status-icons">
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="1" width="3" height="11" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity="0.3"/></svg>
+                <svg width="15" height="12" viewBox="0 0 15 12" fill="currentColor"><path d="M7.5 3.6c1.8 0 3.4.7 4.6 1.9l1.4-1.4C11.8 2.4 9.7 1.6 7.5 1.6S3.2 2.4 1.5 4.1l1.4 1.4C4.1 4.3 5.7 3.6 7.5 3.6zm0 3.6c1 0 2 .4 2.7 1.1l1.4-1.4c-1.1-1.1-2.5-1.7-4.1-1.7s-3 .6-4.1 1.7l1.4 1.4c.7-.7 1.7-1.1 2.7-1.1zM9 10.2c0 .8-.7 1.5-1.5 1.5S6 11 6 10.2s.7-1.5 1.5-1.5S9 9.4 9 10.2z"/></svg>
+                <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor"><rect x="0" y="1" width="21" height="10" rx="2" stroke="currentColor" stroke-width="1" fill="none"/><rect x="22" y="4" width="2" height="4" rx="0.5"/><rect x="2" y="3" width="14" height="6" rx="1" fill="currentColor"/></svg>
+            </div>
+        </div>
+
+        <!-- ========== SCREEN 1: HOME ========== -->
+        <div id="screen-home" class="screen active">
+            <!-- Header -->
+            <div class="home-header">
+                <div class="header-top">
+                    <div class="logo-area">
+                        <div class="logo-icon">
+                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                                <circle cx="14" cy="14" r="14" fill="#FF6B35"/>
+                                <circle cx="9" cy="12" r="3" fill="white"/>
+                                <circle cx="19" cy="12" r="3" fill="white"/>
+                                <circle cx="14" cy="18" r="3" fill="white"/>
+                                <circle cx="14" cy="14" r="2" fill="#FF6B35"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="brand-name">Lamhub</h1>
+                            <p class="brand-slogan" data-en="Where Groups Order Smarter" data-ar="حيث تطلب المجموعات بذكاء">Where Groups Order Smarter</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="lang-toggle" onclick="toggleLanguage()">
+                            <span class="lang-text">عربي</span>
+                        </button>
+                        <button class="icon-btn notification-btn">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                            <span class="notification-dot"></span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Delivery Address -->
+                <div class="delivery-address" onclick="showScreen('screen-home')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FF6B35" stroke="#FF6B35" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="white" stroke="white"/></svg>
+                    <div>
+                        <span class="address-label" data-en="Deliver to" data-ar="التوصيل إلى">Deliver to</span>
+                        <span class="address-text" data-en="King Fahd Road, Riyadh" data-ar="طريق الملك فهد، الرياض">King Fahd Road, Riyadh</span>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+            </div>
+
+            <div class="screen-scroll">
+                <!-- Value Banner -->
+                <div class="value-banner">
+                    <div class="value-banner-content">
+                        <div class="value-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <circle cx="16" cy="16" r="15" stroke="#FF6B35" stroke-width="2"/>
+                                <circle cx="10" cy="13" r="2.5" fill="#FF6B35"/>
+                                <circle cx="22" cy="13" r="2.5" fill="#FF6B35"/>
+                                <circle cx="16" cy="20" r="2.5" fill="#FF6B35"/>
+                                <path d="M10 13L16 16L22 13" stroke="#FF6B35" stroke-width="1.5"/>
+                                <path d="M16 16V20" stroke="#FF6B35" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <div class="value-text">
+                            <h3 data-en="One Location · One Driver · Lower Cost" data-ar="موقع واحد · سائق واحد · تكلفة أقل">One Location · One Driver · Lower Cost</h3>
+                            <p data-en="Order from multiple restaurants, delivered together!" data-ar="اطلب من عدة مطاعم، يوصلك كلها مع بعض!">Order from multiple restaurants, delivered together!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW: Where Will We Deliver From? -->
+                <div class="section-header">
+                    <div class="section-title-row">
+                        <span class="new-badge">NEW</span>
+                        <h2 data-en="Where Will We Deliver From?" data-ar="من وين بنوصّل؟">Where Will We Deliver From?</h2>
+                    </div>
+                </div>
+
+                <div class="hub-cards">
+                    <div class="hub-card" onclick="showScreen('screen-restaurants')">
+                        <div class="hub-card-icon" style="background: linear-gradient(135deg, #FF6B35 0%, #FF8F65 100%);">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <h3 data-en="Restaurant Area Hubs" data-ar="تجمعات المطاعم">Restaurant Area Hubs</h3>
+                        <p data-en="Restaurants & cafés in the same block" data-ar="مطاعم وكافيهات في نفس الحي">Restaurants & cafés in the same block</p>
+                    </div>
+                    <div class="hub-card" onclick="showScreen('screen-restaurants')">
+                        <div class="hub-card-icon" style="background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%);">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="white" stroke-width="1"/></svg>
+                        </div>
+                        <h3 data-en="Cloud Kitchen Hubs" data-ar="مطابخ سحابية">Cloud Kitchen Hubs</h3>
+                        <p data-en="Multiple brands under one roof" data-ar="عدة علامات تجارية تحت سقف واحد">Multiple brands under one roof</p>
+                    </div>
+                    <div class="hub-card" onclick="showScreen('screen-restaurants')">
+                        <div class="hub-card-icon" style="background: linear-gradient(135deg, #059669 0%, #34D399 100%);">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" fill="none" stroke="white" stroke-width="2"/></svg>
+                        </div>
+                        <h3 data-en="Supermarket & Dining" data-ar="سوبرماركت ومطاعم">Supermarket & Dining</h3>
+                        <p data-en="Markets with nearby cafés & restaurants" data-ar="أسواق مع مطاعم وكافيهات قريبة">Markets with nearby cafés & restaurants</p>
+                    </div>
+                </div>
+
+                <!-- Nearby Areas -->
+                <div class="section-header">
+                    <h2 data-en="Nearby Restaurants & Cafés" data-ar="مطاعم وكافيهات قريبة">Nearby Restaurants & Cafés</h2>
+                    <span class="see-all" data-en="See all" data-ar="عرض الكل">See all</span>
+                </div>
+
+                <!-- Area Tabs -->
+                <div class="area-tabs">
+                    <button class="area-tab active" data-area="hittin" onclick="switchArea(this, 'hittin')">
+                        <span data-en="Hittin" data-ar="حطين">Hittin</span>
+                        <span class="area-distance">2.3 km</span>
+                    </button>
+                    <button class="area-tab" data-area="olaya" onclick="switchArea(this, 'olaya')">
+                        <span data-en="Olaya" data-ar="العليا">Olaya</span>
+                        <span class="area-distance">3.1 km</span>
+                    </button>
+                    <button class="area-tab" data-area="malqa" onclick="switchArea(this, 'malqa')">
+                        <span data-en="Al Malqa" data-ar="الملقا">Al Malqa</span>
+                        <span class="area-distance">4.5 km</span>
+                    </button>
+                    <button class="area-tab" data-area="nakheel" onclick="switchArea(this, 'nakheel')">
+                        <span data-en="Al Nakheel" data-ar="النخيل">Al Nakheel</span>
+                        <span class="area-distance">5.2 km</span>
+                    </button>
+                    <button class="area-tab" data-area="kafd" onclick="switchArea(this, 'kafd')">
+                        <span data-en="KAFD" data-ar="كافد">KAFD</span>
+                        <span class="area-distance">6.0 km</span>
+                    </button>
+                </div>
+
+                <!-- Restaurant Lists per Area -->
+                <div id="area-hittin" class="area-restaurants active">
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #D2691E, #8B4513);">
+                            <span class="restaurant-emoji">🍔</span>
+                        </div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row">
+                                <h4>Section-B</h4>
+                                <span class="rating">⭐ 4.6</span>
+                            </div>
+                            <span class="cuisine-tag" data-en="Burgers" data-ar="برجر">Burgers</span>
+                            <div class="fast-badge">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+                                <span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #8B0000, #DC143C);">
+                            <span class="restaurant-emoji">🥩</span>
+                        </div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row">
+                                <h4>Smokey Beards Q</h4>
+                                <span class="rating">⭐ 4.8</span>
+                            </div>
+                            <span class="cuisine-tag" data-en="BBQ" data-ar="مشويات">BBQ</span>
+                            <div class="fast-badge">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+                                <span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #DDA0DD, #BA55D3);">
+                            <span class="restaurant-emoji">☕</span>
+                        </div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row">
+                                <h4>Feels</h4>
+                                <span class="rating">⭐ 4.5</span>
+                            </div>
+                            <span class="cuisine-tag" data-en="Café" data-ar="كافيه">Café</span>
+                            <div class="fast-badge">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+                                <span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #8B6914, #DAA520);">
+                            <span class="restaurant-emoji">☕</span>
+                        </div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row">
+                                <h4>Wood's Café & Roastery</h4>
+                                <span class="rating">⭐ 4.7</span>
+                            </div>
+                            <span class="cuisine-tag" data-en="Coffee" data-ar="قهوة">Coffee</span>
+                            <div class="fast-badge">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+                                <span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #F4A460, #FF8C00);">
+                            <span class="restaurant-emoji">🥞</span>
+                        </div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row">
+                                <h4>Lunch Room</h4>
+                                <span class="rating">⭐ 4.4</span>
+                            </div>
+                            <span class="cuisine-tag" data-en="Brunch" data-ar="برانش">Brunch</span>
+                            <div class="fast-badge">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+                                <span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="area-olaya" class="area-restaurants">
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #4169E1, #1E90FF);"><span class="restaurant-emoji">🌍</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Q ON DA Go</h4><span class="rating">⭐ 4.5</span></div>
+                            <span class="cuisine-tag" data-en="International" data-ar="عالمي">International</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #FF69B4, #FF1493);"><span class="restaurant-emoji">☕</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Sociale Café</h4><span class="rating">⭐ 4.6</span></div>
+                            <span class="cuisine-tag" data-en="Café" data-ar="كافيه">Café</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #6B4226, #A0522D);"><span class="restaurant-emoji">☕</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Bossco Roastery</h4><span class="rating">⭐ 4.7</span></div>
+                            <span class="cuisine-tag" data-en="Coffee" data-ar="قهوة">Coffee</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #FFD700, #FFA500);"><span class="restaurant-emoji">🍽️</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Swiss Butter</h4><span class="rating">⭐ 4.8</span></div>
+                            <span class="cuisine-tag" data-en="Fine Dining" data-ar="مطعم فاخر">Fine Dining</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #FF4500, #FF6347);"><span class="restaurant-emoji">🍛</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Zafran Indian Bistro</h4><span class="rating">⭐ 4.6</span></div>
+                            <span class="cuisine-tag" data-en="Indian" data-ar="هندي">Indian</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="area-malqa" class="area-restaurants">
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #8B0000, #B22222);"><span class="restaurant-emoji">🥩</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>300F Smokehouse</h4><span class="rating">⭐ 4.7</span></div>
+                            <span class="cuisine-tag" data-en="BBQ" data-ar="مشويات">BBQ</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #5C4033, #8B6914);"><span class="restaurant-emoji">☕</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Namq</h4><span class="rating">⭐ 4.8</span></div>
+                            <span class="cuisine-tag" data-en="Coffee" data-ar="قهوة">Coffee</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #F4A460, #DEB887);"><span class="restaurant-emoji">🍳</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>A.O.K Kitchen</h4><span class="rating">⭐ 4.5</span></div>
+                            <span class="cuisine-tag" data-en="Breakfast" data-ar="فطور">Breakfast</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #D2691E, #CD853F);"><span class="restaurant-emoji">🍔</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Nora Smashed Burgers</h4><span class="rating">⭐ 4.6</span></div>
+                            <span class="cuisine-tag" data-en="Burgers" data-ar="برجر">Burgers</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #4A2C2A, #6B3A3A);"><span class="restaurant-emoji">🍫</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Molten Chocolate Café</h4><span class="rating">⭐ 4.9</span></div>
+                            <span class="cuisine-tag" data-en="Desserts" data-ar="حلويات">Desserts</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="area-nakheel" class="area-restaurants">
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #2F4F4F, #556B2F);"><span class="restaurant-emoji">☕</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Elixir Bunn</h4><span class="rating">⭐ 4.8</span></div>
+                            <span class="cuisine-tag" data-en="Coffee" data-ar="قهوة">Coffee</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #FFD700, #FFC107);"><span class="restaurant-emoji">🥞</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Buttermilk</h4><span class="rating">⭐ 4.6</span></div>
+                            <span class="cuisine-tag" data-en="Breakfast" data-ar="فطور">Breakfast</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #8B4513, #A0522D);"><span class="restaurant-emoji">☕</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Breehant Roastery</h4><span class="rating">⭐ 4.5</span></div>
+                            <span class="cuisine-tag" data-en="Coffee" data-ar="قهوة">Coffee</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #228B22, #32CD32);"><span class="restaurant-emoji">🌿</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Urth Café</h4><span class="rating">⭐ 4.7</span></div>
+                            <span class="cuisine-tag" data-en="Café" data-ar="كافيه">Café</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #DB7093, #C71585);"><span class="restaurant-emoji">🌸</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Asfoura Café</h4><span class="rating">⭐ 4.4</span></div>
+                            <span class="cuisine-tag" data-en="Café" data-ar="كافيه">Café</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="area-kafd" class="area-restaurants">
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #1a1a2e, #16213e);"><span class="restaurant-emoji">☕</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Toby's Estate</h4><span class="rating">⭐ 4.7</span></div>
+                            <span class="cuisine-tag" data-en="Coffee & Desserts" data-ar="قهوة وحلويات">Coffee & Desserts</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #000, #333);"><span class="restaurant-emoji">🍔</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Black Tap</h4><span class="rating">⭐ 4.6</span></div>
+                            <span class="cuisine-tag" data-en="Burgers" data-ar="برجر">Burgers</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #C41E3A, #8B0000);"><span class="restaurant-emoji">🍣</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Chotto Matte</h4><span class="rating">⭐ 4.8</span></div>
+                            <span class="cuisine-tag" data-en="Pan-Asian" data-ar="آسيوي">Pan-Asian</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #2C2C54, #474787);"><span class="restaurant-emoji">🍽️</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Kuuru</h4><span class="rating">⭐ 4.7</span></div>
+                            <span class="cuisine-tag" data-en="Modern Dining" data-ar="مطبخ حديث">Modern Dining</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                    <div class="restaurant-card" onclick="showScreen('screen-restaurants')">
+                        <div class="restaurant-img" style="background: linear-gradient(135deg, #0C0C0C, #1a1a1a);"><span class="restaurant-emoji">🍱</span></div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name-row"><h4>Nobu Riyadh</h4><span class="rating">⭐ 4.9</span></div>
+                            <span class="cuisine-tag" data-en="Japanese" data-ar="ياباني">Japanese</span>
+                            <div class="fast-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#059669"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg><span data-en="Same Location – Fast Delivery" data-ar="نفس الموقع – توصيل سريع">Same Location – Fast Delivery</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Start Group Order CTA -->
+                <div class="group-cta">
+                    <div class="group-cta-content">
+                        <div class="group-cta-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div>
+                            <h3 data-en="Start a Group Order" data-ar="ابدأ طلب جماعي">Start a Group Order</h3>
+                            <p data-en="Invite your friends & family to order together" data-ar="ادعُ أصدقاءك وعائلتك للطلب معاً">Invite your friends & family to order together</p>
+                        </div>
+                    </div>
+                    <button class="cta-button" onclick="showScreen('screen-group')" data-en="Create Group" data-ar="إنشاء مجموعة">Create Group</button>
+                </div>
+
+                <div style="height: 100px;"></div>
+            </div>
+        </div>
+
+        <!-- ========== SCREEN 2: CREATE/JOIN GROUP ========== -->
+        <div id="screen-group" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="showScreen('screen-home')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <h2 data-en="Group Order" data-ar="طلب جماعي">Group Order</h2>
+                <div style="width:24px"></div>
+            </div>
+
+            <div class="screen-scroll">
+                <!-- Group Setup -->
+                <div class="group-setup-card">
+                    <div class="group-avatar-row">
+                        <div class="group-avatar main">
+                            <span>A</span>
+                        </div>
+                        <div class="group-avatar">
+                            <span>S</span>
+                        </div>
+                        <div class="group-avatar">
+                            <span>M</span>
+                        </div>
+                        <div class="group-avatar add" onclick="document.getElementById('invite-modal').style.display='flex'">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        </div>
+                    </div>
+                    <h3 data-en="Ahmed's Group Order" data-ar="طلب مجموعة أحمد">Ahmed's Group Order</h3>
+                    <p class="group-subtitle" data-en="3 members · Hittin Hub" data-ar="3 أعضاء · تجمع حطين">3 members · Hittin Hub</p>
+                </div>
+
+                <!-- Invite Options -->
+                <div class="invite-options">
+                    <button class="invite-btn" onclick="document.getElementById('invite-modal').style.display='flex'">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        <span data-en="Share Invite Link" data-ar="مشاركة رابط الدعوة">Share Invite Link</span>
+                    </button>
+                    <button class="invite-btn" onclick="document.getElementById('invite-modal').style.display='flex'">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01M7 12h.01M7 17h.01M12 7h.01M12 12h.01M12 17h.01M17 7h.01M17 12h.01M17 17h.01"/></svg>
+                        <span data-en="Show QR Code" data-ar="عرض رمز QR">Show QR Code</span>
+                    </button>
+                </div>
+
+                <!-- Member Orders -->
+                <div class="section-header" style="padding: 0 20px; margin-top: 24px;">
+                    <h2 data-en="Who's Ordering What" data-ar="مين طلب إيش">Who's Ordering What</h2>
+                </div>
+
+                <div class="member-order-card">
+                    <div class="member-header">
+                        <div class="member-avatar" style="background: #FF6B35;">A</div>
+                        <div class="member-info">
+                            <h4 data-en="Ahmed (You)" data-ar="أحمد (أنت)">Ahmed (You)</h4>
+                            <span class="member-restaurant">Section-B</span>
+                        </div>
+                        <span class="member-total">SAR 45</span>
+                    </div>
+                    <div class="member-items">
+                        <div class="member-item">
+                            <span>1x Classic Smash Burger</span>
+                            <span>SAR 32</span>
+                        </div>
+                        <div class="member-item">
+                            <span>1x Fries</span>
+                            <span>SAR 13</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-order-card">
+                    <div class="member-header">
+                        <div class="member-avatar" style="background: #7C3AED;">S</div>
+                        <div class="member-info">
+                            <h4>Sara</h4>
+                            <span class="member-restaurant">Feels</span>
+                        </div>
+                        <span class="member-total">SAR 38</span>
+                    </div>
+                    <div class="member-items">
+                        <div class="member-item">
+                            <span>1x Iced Spanish Latte</span>
+                            <span>SAR 22</span>
+                        </div>
+                        <div class="member-item">
+                            <span>1x Chocolate Croissant</span>
+                            <span>SAR 16</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-order-card">
+                    <div class="member-header">
+                        <div class="member-avatar" style="background: #059669;">M</div>
+                        <div class="member-info">
+                            <h4>Mohammed</h4>
+                            <span class="member-restaurant">Smokey Beards Q</span>
+                        </div>
+                        <span class="member-total">SAR 62</span>
+                    </div>
+                    <div class="member-items">
+                        <div class="member-item">
+                            <span>1x Brisket Platter</span>
+                            <span>SAR 48</span>
+                        </div>
+                        <div class="member-item">
+                            <span>1x Coleslaw</span>
+                            <span>SAR 14</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add your order -->
+                <button class="add-order-btn" onclick="showScreen('screen-restaurants')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span data-en="Add or Edit Your Order" data-ar="أضف أو عدّل طلبك">Add or Edit Your Order</span>
+                </button>
+
+                <div style="height: 140px;"></div>
+            </div>
+
+            <!-- Floating Group Bar -->
+            <div class="floating-group-bar">
+                <div class="fgb-info">
+                    <div class="fgb-members">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <span>3 <span data-en="members" data-ar="أعضاء">members</span></span>
+                    </div>
+                    <div class="fgb-divider"></div>
+                    <div class="fgb-items">
+                        <span>6 <span data-en="items" data-ar="عناصر">items</span></span>
+                    </div>
+                    <div class="fgb-divider"></div>
+                    <div class="fgb-savings">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#4ADE80"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+                        <span data-en="Save 40%" data-ar="وفّر 40%">Save 40%</span>
+                    </div>
+                </div>
+                <button class="fgb-checkout" onclick="showScreen('screen-cart')" data-en="View Cart" data-ar="عرض السلة">View Cart</button>
+            </div>
+        </div>
+
+        <!-- ========== SCREEN 3: RESTAURANT SELECTION ========== -->
+        <div id="screen-restaurants" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="showScreen('screen-home')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <h2 data-en="Choose Restaurants" data-ar="اختر المطاعم">Choose Restaurants</h2>
+                <div style="width:24px"></div>
+            </div>
+
+            <div class="screen-scroll">
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" data-placeholder-en="Search restaurants..." data-placeholder-ar="ابحث عن مطاعم..." placeholder="Search restaurants...">
+                </div>
+
+                <!-- Filter Chips -->
+                <div class="filter-chips">
+                    <button class="filter-chip active" data-en="All" data-ar="الكل">All</button>
+                    <button class="filter-chip" data-en="Burgers" data-ar="برجر">Burgers</button>
+                    <button class="filter-chip" data-en="Coffee" data-ar="قهوة">Coffee</button>
+                    <button class="filter-chip" data-en="BBQ" data-ar="مشويات">BBQ</button>
+                    <button class="filter-chip" data-en="Café" data-ar="كافيه">Café</button>
+                    <button class="filter-chip" data-en="Asian" data-ar="آسيوي">Asian</button>
+                    <button class="filter-chip" data-en="Breakfast" data-ar="فطور">Breakfast</button>
+                </div>
+
+                <!-- Filter Row -->
+                <div class="filter-row">
+                    <button class="filter-sort-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="16" y2="12"/><line x1="4" y1="18" x2="12" y2="18"/></svg>
+                        <span data-en="Sort by" data-ar="ترتيب">Sort by</span>
+                    </button>
+                    <button class="filter-sort-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        <span data-en="Price" data-ar="السعر">Price</span>
+                    </button>
+                    <button class="filter-sort-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFC107"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+                        <span data-en="Rating" data-ar="التقييم">Rating</span>
+                    </button>
+                </div>
+
+                <!-- Hub Badge -->
+                <div class="hub-location-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF6B35"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="white"/></svg>
+                    <span data-en="Hittin Restaurant Hub · 5 restaurants" data-ar="تجمع مطاعم حطين · 5 مطاعم">Hittin Restaurant Hub · 5 restaurants</span>
+                </div>
+
+                <!-- Restaurant Grid -->
+                <div class="restaurant-grid">
+                    <div class="restaurant-grid-card" onclick="addToCartDemo('Section-B', 'Classic Smash Burger', 32)">
+                        <div class="rgc-img" style="background: linear-gradient(135deg, #D2691E, #8B4513);"><span>🍔</span></div>
+                        <div class="rgc-badge" data-en="Fast Delivery" data-ar="توصيل سريع">Fast Delivery</div>
+                        <div class="rgc-info">
+                            <h4>Section-B</h4>
+                            <div class="rgc-meta">
+                                <span class="rating">⭐ 4.6</span>
+                                <span class="cuisine-tag" data-en="Burgers" data-ar="برجر">Burgers</span>
+                            </div>
+                            <p class="rgc-price" data-en="SAR 25-55 per person" data-ar="25-55 ر.س للشخص">SAR 25-55 per person</p>
+                        </div>
+                    </div>
+                    <div class="restaurant-grid-card" onclick="addToCartDemo('Smokey Beards Q', 'Brisket Platter', 48)">
+                        <div class="rgc-img" style="background: linear-gradient(135deg, #8B0000, #DC143C);"><span>🥩</span></div>
+                        <div class="rgc-badge" data-en="Fast Delivery" data-ar="توصيل سريع">Fast Delivery</div>
+                        <div class="rgc-info">
+                            <h4>Smokey Beards Q</h4>
+                            <div class="rgc-meta">
+                                <span class="rating">⭐ 4.8</span>
+                                <span class="cuisine-tag" data-en="BBQ" data-ar="مشويات">BBQ</span>
+                            </div>
+                            <p class="rgc-price" data-en="SAR 35-75 per person" data-ar="35-75 ر.س للشخص">SAR 35-75 per person</p>
+                        </div>
+                    </div>
+                    <div class="restaurant-grid-card" onclick="addToCartDemo('Feels', 'Iced Spanish Latte', 22)">
+                        <div class="rgc-img" style="background: linear-gradient(135deg, #DDA0DD, #BA55D3);"><span>☕</span></div>
+                        <div class="rgc-badge" data-en="Fast Delivery" data-ar="توصيل سريع">Fast Delivery</div>
+                        <div class="rgc-info">
+                            <h4>Feels</h4>
+                            <div class="rgc-meta">
+                                <span class="rating">⭐ 4.5</span>
+                                <span class="cuisine-tag" data-en="Café" data-ar="كافيه">Café</span>
+                            </div>
+                            <p class="rgc-price" data-en="SAR 18-40 per person" data-ar="18-40 ر.س للشخص">SAR 18-40 per person</p>
+                        </div>
+                    </div>
+                    <div class="restaurant-grid-card" onclick="addToCartDemo('Wood\'s Café', 'V60 Pour Over', 28)">
+                        <div class="rgc-img" style="background: linear-gradient(135deg, #8B6914, #DAA520);"><span>☕</span></div>
+                        <div class="rgc-badge" data-en="Fast Delivery" data-ar="توصيل سريع">Fast Delivery</div>
+                        <div class="rgc-info">
+                            <h4>Wood's Café & Roastery</h4>
+                            <div class="rgc-meta">
+                                <span class="rating">⭐ 4.7</span>
+                                <span class="cuisine-tag" data-en="Coffee" data-ar="قهوة">Coffee</span>
+                            </div>
+                            <p class="rgc-price" data-en="SAR 20-45 per person" data-ar="20-45 ر.س للشخص">SAR 20-45 per person</p>
+                        </div>
+                    </div>
+                    <div class="restaurant-grid-card" onclick="addToCartDemo('Lunch Room', 'Eggs Benedict', 35)">
+                        <div class="rgc-img" style="background: linear-gradient(135deg, #F4A460, #FF8C00);"><span>🥞</span></div>
+                        <div class="rgc-badge" data-en="Fast Delivery" data-ar="توصيل سريع">Fast Delivery</div>
+                        <div class="rgc-info">
+                            <h4>Lunch Room</h4>
+                            <div class="rgc-meta">
+                                <span class="rating">⭐ 4.4</span>
+                                <span class="cuisine-tag" data-en="Brunch" data-ar="برانش">Brunch</span>
+                            </div>
+                            <p class="rgc-price" data-en="SAR 30-60 per person" data-ar="30-60 ر.س للشخص">SAR 30-60 per person</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="height: 100px;"></div>
+            </div>
+        </div>
+
+        <!-- ========== SCREEN 4: GROUP CART ========== -->
+        <div id="screen-cart" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="showScreen('screen-group')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <h2 data-en="Group Cart" data-ar="سلة المجموعة">Group Cart</h2>
+                <div style="width:24px"></div>
+            </div>
+
+            <div class="screen-scroll">
+                <!-- Savings Banner -->
+                <div class="savings-banner">
+                    <div class="savings-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    </div>
+                    <div>
+                        <h4 data-en="You're saving SAR 18 on delivery!" data-ar="توفّر 18 ر.س على التوصيل!">You're saving SAR 18 on delivery!</h4>
+                        <p data-en="vs. ordering separately from 3 restaurants" data-ar="مقارنة بالطلب منفرداً من 3 مطاعم">vs. ordering separately from 3 restaurants</p>
+                    </div>
+                </div>
+
+                <!-- Cart Items by Person -->
+                <div class="cart-person">
+                    <div class="cart-person-header">
+                        <div class="member-avatar" style="background: #FF6B35; width: 32px; height: 32px; font-size: 14px;">A</div>
+                        <h4 data-en="Ahmed (You)" data-ar="أحمد (أنت)">Ahmed (You)</h4>
+                        <span class="cart-person-restaurant">Section-B</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <span class="cart-item-qty">1x</span>
+                            <span>Classic Smash Burger</span>
+                        </div>
+                        <span class="cart-item-price">SAR 32</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <span class="cart-item-qty">1x</span>
+                            <span>Fries</span>
+                        </div>
+                        <span class="cart-item-price">SAR 13</span>
+                    </div>
+                    <div class="cart-person-subtotal">
+                        <span data-en="Subtotal" data-ar="المجموع الفرعي">Subtotal</span>
+                        <span>SAR 45</span>
+                    </div>
+                </div>
+
+                <div class="cart-person">
+                    <div class="cart-person-header">
+                        <div class="member-avatar" style="background: #7C3AED; width: 32px; height: 32px; font-size: 14px;">S</div>
+                        <h4>Sara</h4>
+                        <span class="cart-person-restaurant">Feels</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <span class="cart-item-qty">1x</span>
+                            <span>Iced Spanish Latte</span>
+                        </div>
+                        <span class="cart-item-price">SAR 22</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <span class="cart-item-qty">1x</span>
+                            <span>Chocolate Croissant</span>
+                        </div>
+                        <span class="cart-item-price">SAR 16</span>
+                    </div>
+                    <div class="cart-person-subtotal">
+                        <span data-en="Subtotal" data-ar="المجموع الفرعي">Subtotal</span>
+                        <span>SAR 38</span>
+                    </div>
+                </div>
+
+                <div class="cart-person">
+                    <div class="cart-person-header">
+                        <div class="member-avatar" style="background: #059669; width: 32px; height: 32px; font-size: 14px;">M</div>
+                        <h4>Mohammed</h4>
+                        <span class="cart-person-restaurant">Smokey Beards Q</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <span class="cart-item-qty">1x</span>
+                            <span>Brisket Platter</span>
+                        </div>
+                        <span class="cart-item-price">SAR 48</span>
+                    </div>
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <span class="cart-item-qty">1x</span>
+                            <span>Coleslaw</span>
+                        </div>
+                        <span class="cart-item-price">SAR 14</span>
+                    </div>
+                    <div class="cart-person-subtotal">
+                        <span data-en="Subtotal" data-ar="المجموع الفرعي">Subtotal</span>
+                        <span>SAR 62</span>
+                    </div>
+                </div>
+
+                <!-- Cost Breakdown -->
+                <div class="cost-breakdown">
+                    <h3 data-en="Order Summary" data-ar="ملخص الطلب">Order Summary</h3>
+                    <div class="cost-row">
+                        <span data-en="Items Total" data-ar="إجمالي العناصر">Items Total</span>
+                        <span>SAR 145</span>
+                    </div>
+                    <div class="cost-row">
+                        <span data-en="Delivery Fee (shared)" data-ar="رسوم التوصيل (مشتركة)">Delivery Fee (shared)</span>
+                        <span>SAR 9</span>
+                    </div>
+                    <div class="cost-row savings-row">
+                        <span data-en="Delivery Savings" data-ar="توفير التوصيل">Delivery Savings</span>
+                        <span>-SAR 18</span>
+                    </div>
+                    <div class="cost-row cost-per-person">
+                        <span data-en="Delivery per person" data-ar="التوصيل للشخص">Delivery per person</span>
+                        <span>SAR 3</span>
+                    </div>
+                    <div class="cost-total">
+                        <span data-en="Total" data-ar="الإجمالي">Total</span>
+                        <span>SAR 154</span>
+                    </div>
+                </div>
+
+                <!-- Savings Visualization -->
+                <div class="savings-visual">
+                    <h4 data-en="Delivery Cost Comparison" data-ar="مقارنة تكلفة التوصيل">Delivery Cost Comparison</h4>
+                    <div class="savings-bars">
+                        <div class="savings-bar-row">
+                            <span class="bar-label" data-en="Separate" data-ar="منفصل">Separate</span>
+                            <div class="bar-track">
+                                <div class="bar-fill separate" style="width: 100%;"></div>
+                            </div>
+                            <span class="bar-value">SAR 27</span>
+                        </div>
+                        <div class="savings-bar-row">
+                            <span class="bar-label" data-en="Together" data-ar="معاً">Together</span>
+                            <div class="bar-track">
+                                <div class="bar-fill together" style="width: 33%;"></div>
+                            </div>
+                            <span class="bar-value highlight">SAR 9</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="height: 120px;"></div>
+            </div>
+
+            <!-- Checkout Button -->
+            <div class="checkout-bar">
+                <div class="checkout-total">
+                    <span class="checkout-label" data-en="Total" data-ar="الإجمالي">Total</span>
+                    <span class="checkout-amount">SAR 154</span>
+                </div>
+                <button class="checkout-btn" onclick="showScreen('screen-checkout')" data-en="Proceed to Checkout" data-ar="المتابعة للدفع">Proceed to Checkout</button>
+            </div>
+        </div>
+
+        <!-- ========== SCREEN 5: CHECKOUT ========== -->
+        <div id="screen-checkout" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="showScreen('screen-cart')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <h2 data-en="Checkout" data-ar="الدفع">Checkout</h2>
+                <div style="width:24px"></div>
+            </div>
+
+            <div class="screen-scroll">
+                <!-- Delivery Address -->
+                <div class="checkout-section">
+                    <div class="checkout-section-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF6B35"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="white"/></svg>
+                        <h3 data-en="Delivery Address" data-ar="عنوان التوصيل">Delivery Address</h3>
+                    </div>
+                    <div class="checkout-address-card">
+                        <p data-en="King Fahd Road, Riyadh" data-ar="طريق الملك فهد، الرياض">King Fahd Road, Riyadh</p>
+                        <span class="checkout-edit" data-en="Change" data-ar="تغيير">Change</span>
+                    </div>
+                </div>
+
+                <!-- Estimated Time -->
+                <div class="checkout-section">
+                    <div class="checkout-section-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <h3 data-en="Estimated Delivery" data-ar="التوصيل المتوقع">Estimated Delivery</h3>
+                    </div>
+                    <div class="checkout-time-card">
+                        <span class="checkout-time" data-en="25-35 min" data-ar="25-35 دقيقة">25-35 min</span>
+                        <span class="checkout-time-note" data-en="One driver, all restaurants coordinated" data-ar="سائق واحد، جميع المطاعم منسقة">One driver, all restaurants coordinated</span>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="checkout-section">
+                    <div class="checkout-section-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        <h3 data-en="Payment Method" data-ar="طريقة الدفع">Payment Method</h3>
+                    </div>
+                    <div class="payment-options">
+                        <label class="payment-option active">
+                            <input type="radio" name="payment" checked>
+                            <div class="payment-option-content">
+                                <span class="payment-icon">💳</span>
+                                <div>
+                                    <span class="payment-name" data-en="Credit/Debit Card" data-ar="بطاقة ائتمان/سحب">Credit/Debit Card</span>
+                                    <span class="payment-detail">**** 4242</span>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment">
+                            <div class="payment-option-content">
+                                <span class="payment-icon">🍏</span>
+                                <span class="payment-name">Apple Pay</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment">
+                            <div class="payment-option-content">
+                                <span class="payment-icon">💵</span>
+                                <span class="payment-name" data-en="Cash on Delivery" data-ar="الدفع عند الاستلام">Cash on Delivery</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Split Payment -->
+                <div class="checkout-section">
+                    <div class="checkout-section-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <h3 data-en="Split Payment" data-ar="تقسيم الدفع">Split Payment</h3>
+                    </div>
+                    <div class="split-toggle-row">
+                        <div>
+                            <p class="split-desc" data-en="Each member pays for their own order" data-ar="كل عضو يدفع لطلبه الخاص">Each member pays for their own order</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="split-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="split-breakdown" id="split-breakdown">
+                        <div class="split-person">
+                            <span data-en="Ahmed (You)" data-ar="أحمد (أنت)">Ahmed (You)</span>
+                            <span>SAR 48</span>
+                        </div>
+                        <div class="split-person">
+                            <span>Sara</span>
+                            <span>SAR 41</span>
+                        </div>
+                        <div class="split-person">
+                            <span>Mohammed</span>
+                            <span>SAR 65</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="checkout-summary">
+                    <div class="cost-row">
+                        <span data-en="Items (6)" data-ar="العناصر (6)">Items (6)</span>
+                        <span>SAR 145</span>
+                    </div>
+                    <div class="cost-row">
+                        <span data-en="Delivery" data-ar="التوصيل">Delivery</span>
+                        <span>SAR 9</span>
+                    </div>
+                    <div class="cost-row savings-row">
+                        <span data-en="You saved" data-ar="وفّرت">You saved</span>
+                        <span>-SAR 18</span>
+                    </div>
+                    <div class="cost-total">
+                        <span data-en="Total" data-ar="الإجمالي">Total</span>
+                        <span>SAR 154</span>
+                    </div>
+                </div>
+
+                <!-- Confirmation Note -->
+                <div class="confirmation-note">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <p data-en="All 3 members have confirmed their orders. Ready to go!" data-ar="جميع الأعضاء الثلاثة أكّدوا طلباتهم. جاهزين!">All 3 members have confirmed their orders. Ready to go!</p>
+                </div>
+
+                <div style="height: 120px;"></div>
+            </div>
+
+            <!-- Place Order Button -->
+            <div class="checkout-bar">
+                <div class="checkout-total">
+                    <span class="checkout-label" data-en="Total" data-ar="الإجمالي">Total</span>
+                    <span class="checkout-amount">SAR 154</span>
+                </div>
+                <button class="checkout-btn place-order-btn" onclick="showOrderConfirmation()" data-en="Place Group Order" data-ar="أكّد الطلب الجماعي">Place Group Order</button>
+            </div>
+        </div>
+
+        <!-- ========== ORDER CONFIRMATION OVERLAY ========== -->
+        <div id="order-confirmation" class="confirmation-overlay">
+            <div class="confirmation-content">
+                <div class="confirmation-checkmark">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <h2 data-en="Order Confirmed!" data-ar="تم تأكيد الطلب!">Order Confirmed!</h2>
+                <p data-en="Your group order is being prepared" data-ar="يتم تحضير طلب المجموعة">Your group order is being prepared</p>
+                <div class="confirmation-details">
+                    <div class="conf-detail">
+                        <span class="conf-label" data-en="Order #" data-ar="رقم الطلب">Order #</span>
+                        <span class="conf-value">LH-2847</span>
+                    </div>
+                    <div class="conf-detail">
+                        <span class="conf-label" data-en="Restaurants" data-ar="المطاعم">Restaurants</span>
+                        <span class="conf-value">3</span>
+                    </div>
+                    <div class="conf-detail">
+                        <span class="conf-label" data-en="ETA" data-ar="الوقت المتوقع">ETA</span>
+                        <span class="conf-value" data-en="25-35 min" data-ar="25-35 دقيقة">25-35 min</span>
+                    </div>
+                    <div class="conf-detail">
+                        <span class="conf-label" data-en="Driver" data-ar="السائق">Driver</span>
+                        <span class="conf-value" data-en="Assigned" data-ar="تم التعيين">Assigned</span>
+                    </div>
+                </div>
+                <button class="conf-home-btn" onclick="hideOrderConfirmation()" data-en="Back to Home" data-ar="العودة للرئيسية">Back to Home</button>
+            </div>
+        </div>
+
+        <!-- ========== INVITE MODAL ========== -->
+        <div id="invite-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+            <div class="modal-content">
+                <h3 data-en="Invite to Group" data-ar="دعوة للمجموعة">Invite to Group</h3>
+                <div class="qr-placeholder">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <rect width="120" height="120" rx="12" fill="#F3F4F6"/>
+                        <rect x="20" y="20" width="30" height="30" rx="4" fill="#1F2937"/>
+                        <rect x="70" y="20" width="30" height="30" rx="4" fill="#1F2937"/>
+                        <rect x="20" y="70" width="30" height="30" rx="4" fill="#1F2937"/>
+                        <rect x="70" y="70" width="15" height="15" rx="2" fill="#1F2937"/>
+                        <rect x="85" y="85" width="15" height="15" rx="2" fill="#1F2937"/>
+                        <rect x="55" y="55" width="10" height="10" rx="2" fill="#1F2937"/>
+                    </svg>
+                </div>
+                <p class="qr-text" data-en="Scan to join the group order" data-ar="امسح للانضمام للطلب الجماعي">Scan to join the group order</p>
+                <div class="invite-link-row">
+                    <input type="text" value="lamhub.app/join/AH2847" readonly class="invite-link-input">
+                    <button class="copy-btn" data-en="Copy" data-ar="نسخ">Copy</button>
+                </div>
+                <button class="modal-close-btn" onclick="this.closest('.modal-overlay').style.display='none'" data-en="Close" data-ar="إغلاق">Close</button>
+            </div>
+        </div>
+
+        <!-- ========== BOTTOM NAVIGATION ========== -->
+        <nav class="bottom-nav" id="bottom-nav">
+            <button class="nav-item active" onclick="showScreen('screen-home'); setActiveNav(this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                <span data-en="Home" data-ar="الرئيسية">Home</span>
+            </button>
+            <button class="nav-item" onclick="showScreen('screen-group'); setActiveNav(this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span data-en="Group" data-ar="المجموعة">Group</span>
+            </button>
+            <button class="nav-item" onclick="showScreen('screen-restaurants'); setActiveNav(this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span data-en="Explore" data-ar="استكشف">Explore</span>
+            </button>
+            <button class="nav-item" onclick="showScreen('screen-cart'); setActiveNav(this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                <span data-en="Cart" data-ar="السلة">Cart</span>
+                <span class="cart-badge">6</span>
+            </button>
+            <button class="nav-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span data-en="Profile" data-ar="حسابي">Profile</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
