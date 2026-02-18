@@ -13,6 +13,8 @@ let groupOrder = null;
 let onboardingStep = 0;
 let cartArea = null;
 let selectedPayment = 'card';
+let deliveryAddress = null; // { label: 'Home'|'Work'|'Other', address: '', lat: 24.7136, lng: 46.6753 }
+let savedAddresses = [];
 
 // ===== RESTAURANT DATABASE =====
 const AREAS = [
@@ -429,6 +431,13 @@ function initApp() {
     cart = JSON.parse(localStorage.getItem('lamhub_cart')) || [];
     groupOrder = JSON.parse(localStorage.getItem('lamhub_group')) || null;
 
+    // Restore saved addresses
+    savedAddresses = JSON.parse(localStorage.getItem('lamhub_addresses')) || [];
+    deliveryAddress = JSON.parse(localStorage.getItem('lamhub_delivery_address')) || {
+        label: 'Home', address: currentLang === 'en' ? 'King Fahd Road, Riyadh' : 'طريق الملك فهد، الرياض',
+        lat: 24.7136, lng: 46.6753
+    };
+
     // Restore cartArea from cart items
     if (cart.length > 0) {
         // Try to get area from cart item's area property, or look up from restaurant
@@ -626,7 +635,11 @@ function showScreen(screenId) {
 
     // Render dynamic content
     if (screenId === 'screen-home') renderHome();
-    if (screenId === 'screen-restaurants') renderRestaurants();
+    if (screenId === 'screen-restaurants') {
+        // Reset to area-specific view when entering Explore (not All Stores)
+        showAllStores = false;
+        renderRestaurants();
+    }
     if (screenId === 'screen-cart') renderCart();
     if (screenId === 'screen-checkout') renderCheckout();
     if (screenId === 'screen-profile') renderProfile();
@@ -647,6 +660,19 @@ function renderHome() {
     if (greetEl && currentUser) {
         greetEl.textContent = currentLang === 'en' ? `Hi, ${currentUser.name}` : `أهلاً، ${currentUser.name}`;
     }
+
+    // If cart has items, sync home area to cart area for consistency
+    if (cartArea && cart.length > 0) {
+        activeArea = cartArea;
+    }
+
+    // Sync area tab highlight to activeArea
+    const areaTabs = document.querySelectorAll('.area-tab');
+    const areaIds = ['hittin', 'olaya', 'malqa', 'nakheel', 'kafd'];
+    areaTabs.forEach((tab, i) => {
+        tab.classList.toggle('active', areaIds[i] === activeArea);
+    });
+
     renderAreaRestaurants(activeArea);
 }
 
@@ -684,23 +710,52 @@ function renderAreaRestaurants(areaId) {
 
 // ===== RENDER RESTAURANTS (Browse Screen) =====
 let activeFilter = 'All';
+let showAllStores = false;
 
 function renderRestaurants(filter) {
     if (filter) activeFilter = filter;
     const container = document.getElementById('restaurants-grid');
     if (!container) return;
 
+    // Determine which restaurants to show
     let filtered = RESTAURANTS;
-    if (activeFilter !== 'All') {
-        filtered = RESTAURANTS.filter(r => r.cuisineEn.toLowerCase().includes(activeFilter.toLowerCase()));
+
+    // By default, only show restaurants from the active area (not all stores)
+    if (!showAllStores) {
+        const browseArea = cartArea || activeArea || 'hittin';
+        filtered = RESTAURANTS.filter(r => r.area === browseArea);
     }
 
-    container.innerHTML = filtered.map(r => `
-        <div class="restaurant-grid-card" onclick="openRestaurant('${r.id}')">
+    // Apply cuisine filter on top
+    if (activeFilter !== 'All') {
+        filtered = filtered.filter(r => r.cuisineEn.toLowerCase().includes(activeFilter.toLowerCase()));
+    }
+
+    // Update location badge
+    const badgeEl = document.querySelector('.hub-location-badge span');
+    if (badgeEl) {
+        if (showAllStores) {
+            const count = filtered.length;
+            badgeEl.textContent = currentLang === 'en' ? `All areas · ${count} restaurants` : `جميع المناطق · ${count} مطعم`;
+        } else {
+            const browseArea = cartArea || activeArea || 'hittin';
+            const areaObj = AREAS.find(a => a.id === browseArea);
+            const areaName = areaObj ? (currentLang === 'en' ? areaObj.nameEn : areaObj.nameAr) : browseArea;
+            const count = filtered.length;
+            badgeEl.textContent = currentLang === 'en' ? `${areaName} · ${count} restaurants` : `${areaName} · ${count} مطعم`;
+        }
+    }
+
+    container.innerHTML = filtered.map(r => {
+        const areaObj = AREAS.find(a => a.id === r.area);
+        const areaLabel = showAllStores && areaObj ? (currentLang === 'en' ? areaObj.nameEn : areaObj.nameAr) : '';
+        return `
+        <div class="restaurant-grid-card" onclick="openRestaurantSmart('${r.id}')">
             <div class="rgc-img">
                 <img src="${r.image}" alt="${r.name}" loading="lazy" onerror="this.style.display='none'">
             </div>
             <div class="rgc-badge">${currentLang === 'en' ? 'Fast Delivery' : 'توصيل سريع'}</div>
+            ${showAllStores && areaLabel ? `<div class="rgc-area-badge">${areaLabel}</div>` : ''}
             <div class="rgc-info">
                 <h4>${r.name}</h4>
                 <div class="rgc-meta">
@@ -710,19 +765,59 @@ function renderRestaurants(filter) {
                 <p class="rgc-price">${currentLang === 'en' ? `SAR ${r.priceRange} per person` : `${r.priceRange} ر.س للشخص`}</p>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 
     // Update filter chips
     document.querySelectorAll('.filter-chip').forEach(c => {
         c.classList.toggle('active', c.dataset.filter === activeFilter);
     });
+
+    // Update All Stores chip
+    const allStoresChip = document.getElementById('all-stores-chip');
+    if (allStoresChip) {
+        allStoresChip.classList.toggle('active', showAllStores);
+    }
 }
 
 function setFilter(filter, btn) {
     activeFilter = filter;
+    // Reset "All Stores" when a cuisine filter is selected (except for 'All')
     document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     renderRestaurants();
+}
+
+function toggleAllStores() {
+    showAllStores = !showAllStores;
+    activeFilter = 'All';
+    renderRestaurants();
+}
+
+// Smart restaurant open — shows area conflict if needed from Explore screen
+function openRestaurantSmart(id) {
+    const restaurant = RESTAURANTS.find(r => r.id === id);
+    if (!restaurant) return;
+
+    // If cart has items from a different area, warn user
+    if (cartArea && cart.length > 0 && restaurant.area !== cartArea) {
+        showAreaConflictModal(restaurant, function(switched) {
+            if (switched) {
+                // Cart was cleared, area switched — update activeArea
+                activeArea = restaurant.area;
+                showAllStores = false;
+                openRestaurant(id);
+            }
+        });
+        return;
+    }
+
+    // If "All Stores" is active and restaurant is from a different area than activeArea
+    // (but cart is empty), just switch the area silently
+    if (showAllStores && restaurant.area !== activeArea && cart.length === 0) {
+        activeArea = restaurant.area;
+    }
+
+    openRestaurant(id);
 }
 
 // ===== RESTAURANT MENU =====
@@ -1092,13 +1187,13 @@ function renderCart() {
         </div>
     `}).join('');
 
-    // Update totals
+    // Update totals — 15 SAR standard delivery fee
     const itemsTotal = getCartTotal();
     const restaurantCount = Object.keys(grouped).length;
-    const deliveryFee = 9;
-    const separateDelivery = restaurantCount * 9;
-    const savings = separateDelivery - deliveryFee;
-    const total = itemsTotal + deliveryFee;
+    const DELIVERY_FEE = 15;
+    const separateDelivery = restaurantCount * DELIVERY_FEE;
+    const savings = separateDelivery - DELIVERY_FEE;
+    const total = itemsTotal + DELIVERY_FEE;
 
     const summaryEl = document.getElementById('cart-summary');
     if (summaryEl) {
@@ -1108,13 +1203,20 @@ function renderCart() {
                 <span>SAR ${itemsTotal}</span>
             </div>
             <div class="cost-row">
-                <span>${currentLang === 'en' ? 'Delivery Fee (shared)' : 'رسوم التوصيل (مشتركة)'}</span>
-                <span>SAR ${deliveryFee}</span>
+                <span>${currentLang === 'en' ? 'Delivery Fee' : 'رسوم التوصيل'}</span>
+                <span>SAR ${DELIVERY_FEE}</span>
             </div>
-            ${savings > 0 ? `
+            ${restaurantCount >= 2 ? `
             <div class="cost-row savings-row">
-                <span>${currentLang === 'en' ? 'Delivery Savings' : 'توفير التوصيل'}</span>
-                <span>-SAR ${savings}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>${currentLang === 'en' ? 'You Saved' : 'وفّرت'}</span>
+                <span class="savings-amount">SAR ${savings}</span>
+            </div>
+            <div class="savings-explainer">
+                <span>${currentLang === 'en'
+                    ? `Ordering from ${restaurantCount} restaurants separately would cost SAR ${separateDelivery} delivery. With Lamhub, just SAR ${DELIVERY_FEE}!`
+                    : `الطلب من ${restaurantCount} مطاعم بشكل منفصل يكلف ${separateDelivery} ر.س توصيل. مع لامهب، فقط ${DELIVERY_FEE} ر.س!`
+                }</span>
             </div>` : ''}
             <div class="cost-total">
                 <span>${currentLang === 'en' ? 'Total' : 'الإجمالي'}</span>
@@ -1130,12 +1232,24 @@ function renderCart() {
 
 // ===== RENDER CHECKOUT =====
 function renderCheckout() {
-    const total = getCartTotal() + 9;
+    const total = getCartTotal() + 15;
     const el = document.getElementById('checkout-total-amount');
     if (el) el.textContent = `SAR ${total}`;
 
-    const addressEl = document.getElementById('checkout-address-text');
-    if (addressEl) addressEl.textContent = currentLang === 'en' ? 'King Fahd Road, Riyadh' : 'طريق الملك فهد، الرياض';
+    // Render delivery address section dynamically
+    const addressSection = document.getElementById('checkout-address-section');
+    if (addressSection) {
+        const labelIcons = { Home: '🏠', Work: '💼', Other: '📍' };
+        addressSection.innerHTML = `
+            <div class="checkout-address-card" onclick="openLocationMap()">
+                <div class="checkout-address-info">
+                    <span class="address-type-badge">${labelIcons[deliveryAddress.label] || '📍'} ${currentLang === 'en' ? deliveryAddress.label : (deliveryAddress.label === 'Home' ? 'المنزل' : deliveryAddress.label === 'Work' ? 'العمل' : 'أخرى')}</span>
+                    <p id="checkout-address-text">${deliveryAddress.address}</p>
+                </div>
+                <span class="checkout-edit">${currentLang === 'en' ? 'Change' : 'تغيير'}</span>
+            </div>
+        `;
+    }
 
     // Dynamically render payment options (fixes Issues 3 & 4)
     const paymentContainer = document.querySelector('.payment-options');
@@ -1207,6 +1321,181 @@ function renderCheckout() {
             </div>
         `;
     }
+}
+
+// ===== DELIVERY LOCATION MAP =====
+function openLocationMap() {
+    const existing = document.getElementById('location-map-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'location-map-modal';
+    modal.className = 'location-map-overlay';
+
+    // Default saved addresses + user-saved ones
+    const defaultAddresses = [
+        { label: 'Home', address: currentLang === 'en' ? 'King Fahd Road, Riyadh' : 'طريق الملك فهد، الرياض', lat: 24.7136, lng: 46.6753 },
+        { label: 'Work', address: currentLang === 'en' ? 'Olaya District, Riyadh' : 'حي العليا، الرياض', lat: 24.6900, lng: 46.6850 }
+    ];
+    const allAddresses = [...defaultAddresses, ...savedAddresses.filter(a => a.label === 'Other')];
+
+    modal.innerHTML = `
+        <div class="location-map-content">
+            <div class="location-map-header">
+                <h3>${currentLang === 'en' ? 'Delivery Location' : 'موقع التوصيل'}</h3>
+                <button class="location-map-close" onclick="closeLocationMap()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <div class="location-map-search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="location-search-input" placeholder="${currentLang === 'en' ? 'Search for address...' : 'ابحث عن عنوان...'}" oninput="filterMapAddresses(this.value)">
+            </div>
+
+            <div class="location-map-visual" id="location-map-visual">
+                <div class="map-placeholder">
+                    <svg width="200" height="140" viewBox="0 0 200 140" fill="none">
+                        <rect width="200" height="140" rx="12" fill="#E8F4E8"/>
+                        <path d="M0 80 Q50 60 100 75 Q150 90 200 70 L200 140 L0 140Z" fill="#C8E6C8" opacity="0.5"/>
+                        <rect x="60" y="35" width="30" height="25" rx="3" fill="#D1D5DB"/>
+                        <rect x="110" y="45" width="25" height="20" rx="3" fill="#D1D5DB"/>
+                        <rect x="30" y="55" width="20" height="15" rx="3" fill="#D1D5DB"/>
+                        <rect x="145" y="30" width="22" height="30" rx="3" fill="#D1D5DB"/>
+                        <path d="M0 90 L200 90" stroke="#E5E7EB" stroke-width="2" stroke-dasharray="6 4"/>
+                        <path d="M80 0 L80 140" stroke="#E5E7EB" stroke-width="1.5" stroke-dasharray="6 4"/>
+                    </svg>
+                    <div class="map-pin-marker" id="map-pin">
+                        <svg width="36" height="44" viewBox="0 0 36 44" fill="none">
+                            <ellipse cx="18" cy="40" rx="8" ry="3" fill="rgba(0,0,0,0.15)"/>
+                            <path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 26 18 26s18-12.5 18-26C36 8.06 27.94 0 18 0z" fill="#FF6B35"/>
+                            <circle cx="18" cy="18" r="7" fill="white"/>
+                        </svg>
+                    </div>
+                    <p class="map-drag-hint">${currentLang === 'en' ? 'Tap to adjust pin location' : 'اضغط لتعديل موقع الدبوس'}</p>
+                </div>
+            </div>
+
+            <div class="location-saved-section">
+                <h4>${currentLang === 'en' ? 'Saved Locations' : 'المواقع المحفوظة'}</h4>
+                <div class="location-saved-list" id="location-saved-list">
+                    ${allAddresses.map((a, i) => {
+                        const icon = a.label === 'Home' ? '🏠' : a.label === 'Work' ? '💼' : '📍';
+                        const labelAr = a.label === 'Home' ? 'المنزل' : a.label === 'Work' ? 'العمل' : 'أخرى';
+                        const isActive = deliveryAddress && deliveryAddress.address === a.address;
+                        return `
+                        <div class="location-saved-item ${isActive ? 'active' : ''}" onclick="selectDeliveryAddress(${i}, '${a.label}', '${a.address.replace(/'/g, "\\'")}', ${a.lat}, ${a.lng})">
+                            <span class="location-saved-icon">${icon}</span>
+                            <div class="location-saved-info">
+                                <span class="location-saved-label">${currentLang === 'en' ? a.label : labelAr}</span>
+                                <span class="location-saved-addr">${a.address}</span>
+                            </div>
+                            ${isActive ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+                        </div>`;
+                    }).join('')}
+                </div>
+            </div>
+
+            <div class="location-add-new">
+                <div class="location-add-new-btn" onclick="toggleNewAddressForm()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span>${currentLang === 'en' ? 'Add New Address' : 'إضافة عنوان جديد'}</span>
+                </div>
+                <div class="location-new-form" id="location-new-form" style="display:none;">
+                    <div class="location-type-selector">
+                        <button class="location-type-btn active" onclick="selectLocationType(this, 'Home')">🏠 ${currentLang === 'en' ? 'Home' : 'المنزل'}</button>
+                        <button class="location-type-btn" onclick="selectLocationType(this, 'Work')">💼 ${currentLang === 'en' ? 'Work' : 'العمل'}</button>
+                        <button class="location-type-btn" onclick="selectLocationType(this, 'Other')">📍 ${currentLang === 'en' ? 'Other' : 'أخرى'}</button>
+                    </div>
+                    <input type="text" id="new-address-input" class="location-new-input" placeholder="${currentLang === 'en' ? 'Enter full address...' : 'أدخل العنوان الكامل...'}">
+                    <button class="location-save-btn" onclick="saveNewAddress()">${currentLang === 'en' ? 'Save Address' : 'حفظ العنوان'}</button>
+                </div>
+            </div>
+
+            <button class="location-confirm-btn" onclick="confirmLocationSelection()">
+                ${currentLang === 'en' ? 'Confirm Location' : 'تأكيد الموقع'}
+            </button>
+        </div>
+    `;
+
+    document.getElementById('app').appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('show'));
+}
+
+function closeLocationMap() {
+    const modal = document.getElementById('location-map-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
+let newAddressType = 'Home';
+
+function selectLocationType(btn, type) {
+    newAddressType = type;
+    document.querySelectorAll('.location-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+function toggleNewAddressForm() {
+    const form = document.getElementById('location-new-form');
+    if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+function saveNewAddress() {
+    const input = document.getElementById('new-address-input');
+    if (!input || !input.value.trim()) {
+        showToast(currentLang === 'en' ? 'Please enter an address' : 'يرجى إدخال العنوان');
+        return;
+    }
+    const newAddr = {
+        label: newAddressType,
+        address: input.value.trim(),
+        lat: 24.7136 + (Math.random() - 0.5) * 0.05,
+        lng: 46.6753 + (Math.random() - 0.5) * 0.05
+    };
+    savedAddresses.push(newAddr);
+    localStorage.setItem('lamhub_addresses', JSON.stringify(savedAddresses));
+
+    // Auto-select the new address
+    deliveryAddress = newAddr;
+    localStorage.setItem('lamhub_delivery_address', JSON.stringify(deliveryAddress));
+
+    showToast(currentLang === 'en' ? 'Address saved!' : 'تم حفظ العنوان!');
+    closeLocationMap();
+    renderCheckout();
+}
+
+function selectDeliveryAddress(index, label, address, lat, lng) {
+    deliveryAddress = { label, address, lat, lng };
+    localStorage.setItem('lamhub_delivery_address', JSON.stringify(deliveryAddress));
+
+    // Update UI to show selected
+    document.querySelectorAll('.location-saved-item').forEach(item => item.classList.remove('active'));
+    const items = document.querySelectorAll('.location-saved-item');
+    if (items[index]) items[index].classList.add('active');
+}
+
+function confirmLocationSelection() {
+    closeLocationMap();
+    renderCheckout();
+    // Also update home screen address
+    const homeAddr = document.querySelector('.address-text');
+    if (homeAddr) homeAddr.textContent = deliveryAddress.address;
+    showToast(currentLang === 'en' ? 'Delivery location updated' : 'تم تحديث موقع التوصيل');
+}
+
+function filterMapAddresses(query) {
+    if (!query) {
+        document.querySelectorAll('.location-saved-item').forEach(i => i.style.display = 'flex');
+        return;
+    }
+    query = query.toLowerCase();
+    document.querySelectorAll('.location-saved-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? 'flex' : 'none';
+    });
 }
 
 function selectPayment(method) {
@@ -1403,7 +1692,7 @@ function placeOrder() {
     document.getElementById('conf-order-num').textContent = 'LH-' + Math.floor(1000 + Math.random() * 9000);
     document.getElementById('conf-restaurants').textContent = [...new Set(cart.map(c => c.restaurantName))].length;
     document.getElementById('conf-items').textContent = getCartItemCount();
-    document.getElementById('conf-total').textContent = `SAR ${getCartTotal() + 9}`;
+    document.getElementById('conf-total').textContent = `SAR ${getCartTotal() + 15}`;
 }
 
 function hideOrderConfirmation() {
