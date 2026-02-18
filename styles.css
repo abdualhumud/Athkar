@@ -2067,8 +2067,7 @@ body {
     transition: all 0.2s;
 }
 
-.payment-option.active,
-.payment-option:has(input:checked) {
+.payment-option.active {
     border-color: var(--primary);
     background: var(--primary-light);
 }
@@ -2085,6 +2084,23 @@ body {
 
 .payment-icon {
     font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.payment-name {
+    font-weight: 500;
+    font-size: 14px;
+    display: block;
+}
+
+.payment-detail {
+    font-size: 12px;
+    color: var(--gray-500);
+    display: block;
 }
 
 .payment-name {
@@ -2672,4 +2688,200 @@ img {
 
 img[src=""] {
     display: none;
+}
+
+/* ===== AREA CONFLICT MODAL ===== */
+.area-conflict-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.area-conflict-overlay.show {
+    opacity: 1;
+}
+
+.area-conflict-box {
+    background: white;
+    border-radius: 20px;
+    padding: 28px 24px;
+    max-width: 340px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.area-conflict-overlay.show .area-conflict-box {
+    transform: scale(1);
+}
+
+.area-conflict-icon {
+    margin-bottom: 12px;
+}
+
+.area-conflict-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 8px;
+}
+
+.area-conflict-msg {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.area-conflict-msg strong {
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.area-conflict-suggestions {
+    background: var(--gray-50);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+[dir="rtl"] .area-conflict-suggestions {
+    text-align: right;
+}
+
+.area-conflict-suggest-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+}
+
+.area-conflict-suggest-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.15s;
+}
+
+.area-conflict-suggest-item:hover {
+    background: var(--gray-100);
+}
+
+.area-conflict-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.area-conflict-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.area-conflict-btn.switch-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.area-conflict-btn.switch-btn:active {
+    background: #e55a2b;
+}
+
+.area-conflict-btn.stay-btn {
+    background: var(--gray-100);
+    color: var(--dark);
+}
+
+.area-conflict-btn.stay-btn:active {
+    background: var(--gray-200);
+}
+
+/* ===== ADD CARD FORM ===== */
+.add-card-section {
+    margin-top: 4px;
+}
+
+.add-card-trigger {
+    border-style: dashed !important;
+    border-color: var(--gray-300) !important;
+    background: transparent !important;
+}
+
+.add-card-form {
+    background: var(--gray-50);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 8px;
+}
+
+.add-card-input-group {
+    margin-bottom: 12px;
+}
+
+.add-card-input-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-500);
+    margin-bottom: 4px;
+}
+
+.add-card-input-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Inter', monospace;
+    background: white;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.add-card-input-group input:focus {
+    border-color: var(--primary);
+}
+
+.add-card-row {
+    display: flex;
+    gap: 12px;
+}
+
+.add-card-save-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-card-save-btn:active {
+    background: #e55a2b;
 }

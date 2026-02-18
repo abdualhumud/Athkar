@@ -11,6 +11,8 @@ let currentItem = null;
 let itemQuantity = 1;
 let groupOrder = null;
 let onboardingStep = 0;
+let cartArea = null;
+let selectedPayment = 'card';
 
 // ===== RESTAURANT DATABASE =====
 const AREAS = [
@@ -427,6 +429,20 @@ function initApp() {
     cart = JSON.parse(localStorage.getItem('lamhub_cart')) || [];
     groupOrder = JSON.parse(localStorage.getItem('lamhub_group')) || null;
 
+    // Restore cartArea from cart items
+    if (cart.length > 0) {
+        // Try to get area from cart item's area property, or look up from restaurant
+        const firstItem = cart[0];
+        if (firstItem.area) {
+            cartArea = firstItem.area;
+        } else {
+            const restaurant = RESTAURANTS.find(r => r.id === firstItem.restaurantId);
+            if (restaurant) cartArea = restaurant.area;
+        }
+    } else {
+        cartArea = null;
+    }
+
     if (currentUser) {
         showScreen('screen-home');
     } else {
@@ -511,6 +527,7 @@ function verifyOTP() {
 function logout() {
     currentUser = null;
     cart = [];
+    cartArea = null;
     groupOrder = null;
     localStorage.removeItem('lamhub_user');
     localStorage.removeItem('lamhub_cart');
@@ -779,6 +796,107 @@ function renderMenuItems() {
     `}).join('');
 }
 
+// ===== AREA CONFLICT MODAL =====
+function showAreaConflictModal(newRestaurant, callback) {
+    // Remove any existing modal
+    const existing = document.getElementById('area-conflict-modal');
+    if (existing) existing.remove();
+
+    const currentAreaObj = AREAS.find(a => a.id === cartArea);
+    const newAreaObj = AREAS.find(a => a.id === newRestaurant.area);
+    const currentAreaName = currentAreaObj ? (currentLang === 'en' ? currentAreaObj.nameEn : currentAreaObj.nameAr) : cartArea;
+    const newAreaName = newAreaObj ? (currentLang === 'en' ? newAreaObj.nameEn : newAreaObj.nameAr) : newRestaurant.area;
+
+    // Find similar restaurants in the current cart area (same cuisine type)
+    const similarInCurrentArea = RESTAURANTS.filter(r =>
+        r.area === cartArea &&
+        r.id !== newRestaurant.id &&
+        r.cuisineEn.toLowerCase() === newRestaurant.cuisineEn.toLowerCase()
+    );
+
+    let suggestionsHTML = '';
+    if (similarInCurrentArea.length > 0) {
+        const suggestionLabel = currentLang === 'en'
+            ? `Similar restaurants in ${currentAreaName}`
+            : `مطاعم مشابهة في ${currentAreaName}`;
+        suggestionsHTML = `
+            <div class="area-conflict-suggestions">
+                <p class="area-conflict-suggest-label">${suggestionLabel}:</p>
+                ${similarInCurrentArea.slice(0, 3).map(r => `
+                    <div class="area-conflict-suggest-item" onclick="closeAreaConflictModal(); openRestaurant('${r.id}')">
+                        <img src="${r.image}" alt="${r.name}" style="width:36px;height:36px;border-radius:8px;object-fit:cover;">
+                        <div style="flex:1;min-width:0;">
+                            <span style="font-weight:600;font-size:13px;display:block;">${r.name}</span>
+                            <span style="font-size:11px;color:#6B7280;">⭐ ${r.rating} · ${currentLang === 'en' ? r.cuisineEn : r.cuisineAr}</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    const modal = document.createElement('div');
+    modal.id = 'area-conflict-modal';
+    modal.className = 'area-conflict-overlay';
+    modal.innerHTML = `
+        <div class="area-conflict-box">
+            <div class="area-conflict-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+            </div>
+            <h3 class="area-conflict-title">${currentLang === 'en' ? 'Different Delivery Area' : 'منطقة توصيل مختلفة'}</h3>
+            <p class="area-conflict-msg">${currentLang === 'en'
+                ? 'Items from different areas will increase delivery cost and time. Your cart has items from <strong>' + currentAreaName + '</strong>, but this restaurant is in <strong>' + newAreaName + '</strong>.'
+                : 'العناصر من مناطق مختلفة ستزيد تكلفة ووقت التوصيل. سلتك تحتوي على عناصر من <strong>' + currentAreaName + '</strong>، لكن هذا المطعم في <strong>' + newAreaName + '</strong>.'
+            }</p>
+            ${suggestionsHTML}
+            <div class="area-conflict-actions">
+                <button class="area-conflict-btn switch-btn" id="area-conflict-switch">
+                    ${currentLang === 'en' ? 'Switch to ' + newAreaName : 'انتقل إلى ' + newAreaName}
+                </button>
+                <button class="area-conflict-btn stay-btn" id="area-conflict-stay">
+                    ${currentLang === 'en' ? 'Stay in ' + currentAreaName : 'ابقَ في ' + currentAreaName}
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('app').appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('show'));
+
+    document.getElementById('area-conflict-switch').addEventListener('click', function() {
+        // Clear cart and switch area
+        cart = [];
+        cartArea = newRestaurant.area;
+        saveCart();
+        closeAreaConflictModal();
+        callback(true);
+    });
+
+    document.getElementById('area-conflict-stay').addEventListener('click', function() {
+        closeAreaConflictModal();
+        callback(false);
+    });
+
+    // Close on overlay click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeAreaConflictModal();
+            callback(false);
+        }
+    });
+}
+
+function closeAreaConflictModal() {
+    const modal = document.getElementById('area-conflict-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
 // ===== ITEM DETAIL MODAL =====
 function openItemDetail(itemId) {
     const r = currentRestaurant;
@@ -815,19 +933,44 @@ function changeDetailQty(delta) {
 function addItemFromDetail() {
     if (!currentItem || !currentRestaurant) return;
 
-    const existing = cart.find(c => c.itemId === currentItem.id);
+    // Check area conflict
+    if (cartArea && cartArea !== currentRestaurant.area && cart.length > 0) {
+        // Capture references before async callback
+        const itemToAdd = currentItem;
+        const restaurantToAdd = currentRestaurant;
+        const qtyToAdd = itemQuantity;
+
+        showAreaConflictModal(restaurantToAdd, function(switched) {
+            if (switched) {
+                // Cart was cleared, add the new item
+                performAddToCart(itemToAdd, restaurantToAdd, qtyToAdd);
+            }
+            // If not switched, do nothing (stay in current area)
+        });
+        return;
+    }
+
+    performAddToCart(currentItem, currentRestaurant, itemQuantity);
+}
+
+function performAddToCart(item, restaurant, qty) {
+    // Set the cart area
+    cartArea = restaurant.area;
+
+    const existing = cart.find(c => c.itemId === item.id);
     if (existing) {
-        existing.quantity += itemQuantity;
+        existing.quantity += qty;
     } else {
         cart.push({
-            itemId: currentItem.id,
-            restaurantId: currentRestaurant.id,
-            restaurantName: currentRestaurant.name,
-            nameEn: currentItem.nameEn,
-            nameAr: currentItem.nameAr,
-            price: currentItem.price,
-            quantity: itemQuantity,
-            image: currentItem.image
+            itemId: item.id,
+            restaurantId: restaurant.id,
+            restaurantName: restaurant.name,
+            area: restaurant.area,
+            nameEn: item.nameEn,
+            nameAr: item.nameAr,
+            price: item.price,
+            quantity: qty,
+            image: item.image
         });
     }
 
@@ -835,8 +978,8 @@ function addItemFromDetail() {
     closeItemDetail();
     renderMenuItems();
     showToast(currentLang === 'en'
-        ? `Added ${currentItem.nameEn} to cart`
-        : `تمت إضافة ${currentItem.nameAr} للسلة`
+        ? `Added ${item.nameEn} to cart`
+        : `تمت إضافة ${item.nameAr} للسلة`
     );
 }
 
@@ -848,6 +991,11 @@ function updateCartItem(itemId, delta) {
     item.quantity += delta;
     if (item.quantity <= 0) {
         cart = cart.filter(c => c.itemId !== itemId);
+    }
+
+    // Reset cartArea when cart becomes empty
+    if (cart.length === 0) {
+        cartArea = null;
     }
 
     saveCart();
@@ -988,6 +1136,131 @@ function renderCheckout() {
 
     const addressEl = document.getElementById('checkout-address-text');
     if (addressEl) addressEl.textContent = currentLang === 'en' ? 'King Fahd Road, Riyadh' : 'طريق الملك فهد، الرياض';
+
+    // Dynamically render payment options (fixes Issues 3 & 4)
+    const paymentContainer = document.querySelector('.payment-options');
+    if (paymentContainer) {
+        const svgCreditCard = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`;
+        const svgApplePay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="#333"><path d="M17.72 7.54c-.47-.56-1.13-.88-1.83-.88-.86 0-1.44.38-1.92.38-.5 0-1.16-.37-1.86-.37-1.04.01-2.13.63-2.71 1.62-1.17 2.02-.3 5.03.83 6.68.55.8 1.21 1.7 2.08 1.67.83-.03 1.15-.54 2.15-.54 1 0 1.29.54 2.17.52.9-.02 1.46-.82 2.01-1.63.37-.53.65-1.08.82-1.5-2.04-.85-2.37-4-.34-5.23zM15.4 4.01c.46-.56.76-1.33.68-2.1-.65.03-1.43.44-1.89 1-.42.49-.79 1.28-.69 2.03.72.06 1.45-.37 1.9-.93z"/></svg>`;
+        const svgCash = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`;
+        const svgAddCard = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="12" y1="9" x2="12" y2="17"/><line x1="8" y1="13" x2="16" y2="13"/></svg>`;
+
+        const paymentOptions = [
+            {
+                id: 'card',
+                icon: svgCreditCard,
+                nameEn: 'Credit/Debit Card',
+                nameAr: 'بطاقة ائتمان',
+                detail: '**** 4242'
+            },
+            {
+                id: 'apple',
+                icon: svgApplePay,
+                nameEn: 'Apple Pay',
+                nameAr: 'Apple Pay',
+                detail: ''
+            },
+            {
+                id: 'cash',
+                icon: svgCash,
+                nameEn: 'Cash on Delivery',
+                nameAr: 'الدفع عند الاستلام',
+                detail: ''
+            }
+        ];
+
+        paymentContainer.innerHTML = paymentOptions.map(opt => `
+            <div class="payment-option ${selectedPayment === opt.id ? 'active' : ''}" onclick="selectPayment('${opt.id}')">
+                <div class="payment-option-content">
+                    <span class="payment-icon">${opt.icon}</span>
+                    <div>
+                        <span class="payment-name">${currentLang === 'en' ? opt.nameEn : opt.nameAr}</span>
+                        ${opt.detail ? `<span class="payment-detail">${opt.detail}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('') + `
+            <div class="add-card-section" id="add-card-section">
+                <div class="payment-option add-card-trigger" onclick="toggleAddCardForm()">
+                    <div class="payment-option-content">
+                        <span class="payment-icon">${svgAddCard}</span>
+                        <span class="payment-name" style="color:#6B7280;">${currentLang === 'en' ? 'Add New Card' : 'إضافة بطاقة جديدة'}</span>
+                    </div>
+                </div>
+                <div class="add-card-form" id="add-card-form" style="display:none;">
+                    <div class="add-card-input-group">
+                        <label>${currentLang === 'en' ? 'Card Number' : 'رقم البطاقة'}</label>
+                        <input type="text" id="new-card-number" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCardNumber(this)">
+                    </div>
+                    <div class="add-card-row">
+                        <div class="add-card-input-group" style="flex:1;">
+                            <label>${currentLang === 'en' ? 'Expiry' : 'الانتهاء'}</label>
+                            <input type="text" id="new-card-expiry" placeholder="MM/YY" maxlength="5" oninput="formatCardExpiry(this)">
+                        </div>
+                        <div class="add-card-input-group" style="flex:1;">
+                            <label>CVV</label>
+                            <input type="text" id="new-card-cvv" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                    <button class="add-card-save-btn" onclick="saveNewCard()">${currentLang === 'en' ? 'Save Card' : 'حفظ البطاقة'}</button>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function selectPayment(method) {
+    selectedPayment = method;
+    document.querySelectorAll('.payment-option').forEach(opt => {
+        opt.classList.remove('active');
+    });
+    // Find the clicked option and add active
+    const options = document.querySelectorAll('.payment-option:not(.add-card-trigger)');
+    const methodMap = ['card', 'apple', 'cash'];
+    options.forEach((opt, index) => {
+        if (methodMap[index] === method) {
+            opt.classList.add('active');
+        }
+    });
+}
+
+function toggleAddCardForm() {
+    const form = document.getElementById('add-card-form');
+    if (form) {
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function formatCardNumber(input) {
+    let value = input.value.replace(/\D/g, '');
+    value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+    input.value = value.substring(0, 19);
+}
+
+function formatCardExpiry(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    input.value = value.substring(0, 5);
+}
+
+function saveNewCard() {
+    const num = document.getElementById('new-card-number').value.replace(/\s/g, '');
+    const exp = document.getElementById('new-card-expiry').value;
+    const cvv = document.getElementById('new-card-cvv').value;
+
+    if (num.length < 13 || !exp || cvv.length < 3) {
+        showToast(currentLang === 'en' ? 'Please fill in all card details' : 'يرجى ملء جميع بيانات البطاقة');
+        return;
+    }
+
+    // For demo, just show success and select card payment
+    selectedPayment = 'card';
+    const last4 = num.slice(-4);
+    showToast(currentLang === 'en' ? `Card ending in ${last4} added` : `تمت إضافة البطاقة المنتهية بـ ${last4}`);
+    toggleAddCardForm();
+    renderCheckout();
 }
 
 // ===== RENDER PROFILE =====
@@ -1136,6 +1409,7 @@ function placeOrder() {
 function hideOrderConfirmation() {
     document.getElementById('order-confirmation').classList.remove('show');
     cart = [];
+    cartArea = null;
     groupOrder = null;
     saveCart();
     localStorage.removeItem('lamhub_group');
