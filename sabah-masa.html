@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أذكار الصباح والمساء</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Cream (default) ─── */
+    :root {
+      --bg:             #FAF6F0;
+      --card:           #FFFDF9;
+      --border:         #E8DDD0;
+      --accent:         #7A5C3E;
+      --accent2:        #A07850;
+      --text:           #2C1F0F;
+      --muted:          #7A6652;
+      --ref-bg:         #F5EDE2;
+      --counter-bg:     #7A5C3E;
+      --counter-fg:     #FFFFFF;
+      --btn-reset:      #E8DDD0;
+      --btn-reset-text: #5C4433;
+      --header-bg:      #7A5C3E;
+      --header-fg:      #FFFDF9;
+      --shadow:         rgba(122,92,62,0.12);
+      --font-size-base: 24px;
+    }
+
+    /* ─── Dark / Night ─── */
+    [data-theme="dark"] {
+      --bg:             #1A1612;
+      --card:           #242018;
+      --border:         #3A3228;
+      --accent:         #C8A87A;
+      --accent2:        #E0C090;
+      --text:           #F5EDD8;
+      --muted:          #B0906A;
+      --ref-bg:         #2E2820;
+      --counter-bg:     #C8A87A;
+      --counter-fg:     #1A1612;
+      --btn-reset:      #3A3228;
+      --btn-reset-text: #C8A87A;
+      --header-bg:      #2E2820;
+      --header-fg:      #F5EDD8;
+      --shadow:         rgba(0,0,0,0.30);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Amiri', serif;
+      font-size: var(--font-size-base);
+      line-height: 1.7;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ─── Header ─── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--header-bg);
+      color: var(--header-fg);
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: var(--header-fg);
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-family: 'Amiri', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      touch-action: manipulation;
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .back-link:active { background: rgba(255,255,255,0.30); }
+
+    /* Title + color swatch area */
+    .title-area {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .site-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--header-fg);
+      text-align: center;
+    }
+    .site-title small {
+      display: block;
+      font-size: 0.52rem;
+      font-weight: 400;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    /* Color swatch selector */
+    .color-selector {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .color-label {
+      font-size: 0.6rem;
+      color: var(--header-fg);
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+    .color-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: box-shadow 0.15s, transform 0.15s;
+      border: 2px solid transparent;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .swatch-cream { background: #FAF6F0; border-color: rgba(255,255,255,0.4); }
+    .swatch-dark  { background: #1A1612; border-color: rgba(255,255,255,0.25); }
+    .color-swatch.active { box-shadow: 0 0 0 2.5px #fff; transform: scale(1.18); }
+    .color-swatch:active { opacity: 0.75; }
+
+    /* Font controls */
+    .font-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .font-btn {
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: var(--header-fg);
+      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      font-size: 1.3rem;
+      font-family: 'Amiri', serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      transition: background 0.15s;
+      user-select: none;
+    }
+    .font-btn:active   { background: rgba(255,255,255,0.30); }
+    .font-btn:disabled { opacity: 0.35; cursor: default; }
+    .font-size-label {
+      font-size: 0.7rem;
+      opacity: 0.85;
+      min-width: 36px;
+      text-align: center;
+      color: var(--header-fg);
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: var(--header-fg);
+      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:active { background: rgba(255,255,255,0.30); }
+
+    /* ─── Main ─── */
+    .main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px 12px 60px;
+    }
+
+    /* ─── Top page navigation ─── */
+    .page-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .nav-option {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 10px 16px;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: 0 3px 12px var(--shadow);
+      gap: 5px;
+      transition: background 0.2s, border-color 0.2s;
+      touch-action: manipulation;
+    }
+    .nav-option:active { background: var(--ref-bg); }
+    .nav-icon  { font-size: 1.5rem; line-height: 1; }
+    .nav-label { font-size: 0.78rem; font-weight: 700; color: var(--accent); line-height: 1.3; }
+    .nav-sub   { font-size: 0.48rem; color: var(--muted); line-height: 1.4; }
+
+    /* ─── Section heading ─── */
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: center;
+      margin: 32px 0 20px;
+      letter-spacing: 0.04em;
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .section-title:first-of-type { margin-top: 0; }
+
+    /* ─── Timing badge ─── */
+    .timing-badge {
+      display: inline-block;
+      background: var(--accent2);
+      color: #fff;
+      border-radius: 8px;
+      padding: 3px 10px;
+      font-size: 0.5rem;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    /* ─── Adhkar card ─── */
+    .wird-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 20px 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px var(--shadow);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    /* Card header */
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .hadith-badge {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 10px;
+      padding: 4px 14px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      line-height: 1.5;
+    }
+    .surah-badge {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 10px;
+      padding: 4px 14px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Hadith main text */
+    .wird-text {
+      font-size: 1em;
+      line-height: 2;
+      color: var(--text);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    /* Quran verse container */
+    .verses {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+    .basmala {
+      font-size: 1em;
+      line-height: 2;
+      text-align: center;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .verse-line {
+      display: block;
+      font-size: 1em;
+      line-height: 2.1;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .verse-num {
+      display: inline-block;
+      font-size: 0.75em;
+      color: var(--accent);
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    /* Evening variant note */
+    .evening-note {
+      background: var(--ref-bg);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.6rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 14px;
+      border-right: 3px solid var(--accent2);
+      font-style: normal;
+    }
+    .evening-note strong { color: var(--text); }
+
+    /* Reference box */
+    .wird-ref {
+      background: var(--ref-bg);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.6rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 14px;
+      margin-bottom: 16px;
+      border-right: 4px solid var(--accent2);
+      transition: background 0.3s;
+    }
+    .wird-ref strong { color: var(--text); font-weight: 700; }
+    .auth-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 6px;
+      padding: 1px 8px;
+      font-size: 0.5rem;
+      margin-top: 4px;
+    }
+
+    /* ─── Counter ─── */
+    .counter-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .counter-tap {
+      background: var(--counter-bg);
+      color: var(--counter-fg);
+      border: none;
+      border-radius: 16px;
+      padding: 14px 32px;
+      font-family: 'Amiri', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.1s;
+      user-select: none;
+      min-width: 120px;
+      text-align: center;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+    .counter-tap:active { transform: scale(0.96); }
+    .counter-num {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 48px;
+      text-align: center;
+    }
+    .counter-reset {
+      background: var(--btn-reset);
+      color: var(--btn-reset-text);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-family: 'Amiri', serif;
+      font-size: 0.65rem;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: opacity 0.15s;
+    }
+    .counter-reset:active { opacity: 0.7; }
+
+    /* ─── Divider ─── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 20px 24px;
+      opacity: 0.5;
+    }
+
+    /* ─── Footer ─── */
+    .site-footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.55rem;
+      padding: 20px;
+      opacity: 0.7;
+    }
+
+    /* ─── Back-to-top ─── */
+    #back-top {
+      position: fixed;
+      bottom: 24px;
+      left: 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px var(--shadow);
+      touch-action: manipulation;
+      z-index: 200;
+    }
+    #back-top.visible { display: flex; }
+
+    @media (max-width: 400px) {
+      .wird-card { padding: 18px 14px 16px; }
+      .page-nav  { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <a href="wird.html" class="back-link">&#8592; رجوع</a>
+    <div class="title-area">
+      <div class="site-title">
+        أذكار الصباح والمساء
+        <small>أذكار مأثورة عن النبي ﷺ</small>
+      </div>
+      <div class="color-selector">
+        <span class="color-label">اللون</span>
+        <button class="color-swatch swatch-cream active" id="swatch-cream"
+                onclick="setPillTheme(false)" title="كريمي" aria-label="الوضع الكريمي"></button>
+        <button class="color-swatch swatch-dark" id="swatch-dark"
+                onclick="setPillTheme(true)"  title="ليلي"  aria-label="الوضع الليلي"></button>
+      </div>
+    </div>
+    <div class="font-controls">
+      <button class="font-btn" id="font-down" aria-label="تصغير الخط">أ−</button>
+      <span class="font-size-label" id="font-label">متوسط</span>
+      <button class="font-btn" id="font-up"   aria-label="تكبير الخط">أ+</button>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="تبديل المظهر" title="ليلي / نهاري">🌙</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ══ روابط التنقل العلوية ══ -->
+  <nav class="page-nav" aria-label="تنقل بين الصفحات">
+    <a href="index.html" class="nav-option">
+      <span class="nav-icon">📚</span>
+      <span class="nav-label">جوامع الأذكار</span>
+      <span class="nav-sub">٥٠ دعاءً مأثوراً</span>
+    </a>
+    <a href="wird.html" class="nav-option">
+      <span class="nav-icon">📖</span>
+      <span class="nav-label">الورد اليومي</span>
+      <span class="nav-sub">قرآن كريم وأذكار مأثورة</span>
+    </a>
+  </nav>
+
+  <!-- ══════════════════════════════
+       أذكار الصباح
+  ══════════════════════════════ -->
+  <h2 class="section-title">﴿ أذكار الصباح ﴾</h2>
+
+  <!-- ١ — أصبحنا وأصبح الملك -->
+  <article class="wird-card" id="sm1">
+    <div class="card-header">
+      <div class="hadith-badge">أصبحنا وأصبح الملك لله</div>
+      <span class="timing-badge">صباحاً</span>
+    </div>
+    <div class="wird-text">
+      «أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ»
+    </div>
+    <div class="evening-note">
+      <strong>وفي المساء:</strong> «أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ...» ويقول: «خَيْرَ هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا» بدلاً من «خَيْرَ مَا فِي هَذَا الْيَوْمِ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> عبدالله بن مسعود رضي الله عنه — أن النبيَّ ﷺ كان يقول ذلك إذا أصبح وإذا أمسى<br>
+      <strong>المصدر:</strong> رواه مسلم (2723) وأبو داود (5071)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm1')">↺ صفر</button>
+      <span class="counter-num" id="count-sm1">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm1')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ٢ — اللهم بك أصبحنا -->
+  <article class="wird-card" id="sm2">
+    <div class="card-header">
+      <div class="hadith-badge">اللهم بك أصبحنا</div>
+      <span class="timing-badge">صباحاً</span>
+    </div>
+    <div class="wird-text">
+      «اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ»
+    </div>
+    <div class="evening-note">
+      <strong>وفي المساء:</strong> «اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> أبو هريرة رضي الله عنه — أن النبيَّ ﷺ كان يقول إذا أصبح وإذا أمسى<br>
+      <strong>المصدر:</strong> رواه أبو داود (5068) والترمذي (3391)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm2')">↺ صفر</button>
+      <span class="counter-num" id="count-sm2">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm2')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ٣ — سيد الاستغفار -->
+  <article class="wird-card" id="sm3">
+    <div class="card-header">
+      <div class="hadith-badge">سيد الاستغفار</div>
+      <span class="timing-badge">صباحاً ومساءً</span>
+    </div>
+    <div class="wird-text">
+      «اللَّهُمَّ أَنْتَ رَبِّي، لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ لَكَ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> شداد بن أوس رضي الله عنه — قال النبيُّ ﷺ: «مَنْ قَالَهَا مِنَ النَّهَارِ مُوقِنًا بِهَا فَمَاتَ مِنْ يَوْمِهِ قَبْلَ أَنْ يُمْسِيَ فَهُوَ مِنْ أَهْلِ الْجَنَّةِ، وَمَنْ قَالَهَا مِنَ اللَّيْلِ وَهُوَ مُوقِنٌ بِهَا فَمَاتَ قَبْلَ أَنْ يُصْبِحَ فَهُوَ مِنْ أَهْلِ الْجَنَّةِ»<br>
+      <strong>المصدر:</strong> رواه البخاري (6306)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm3')">↺ صفر</button>
+      <span class="counter-num" id="count-sm3">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm3')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ٤ — لا إله إلا الله وحده × ١٠ -->
+  <article class="wird-card" id="sm4">
+    <div class="card-header">
+      <div class="hadith-badge">لا إله إلا الله وحده لا شريك له</div>
+      <span class="timing-badge">صباحاً × ١٠</span>
+    </div>
+    <div class="wird-text">
+      «لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> أبو أيوب الأنصاري رضي الله عنه — قال النبيُّ ﷺ: «مَنْ قَالَهَا حِينَ يُصْبِحُ عَشْرَ مَرَّاتٍ كَانَ كَمَنْ أَعْتَقَ أَرْبَعَةً مِنْ وُلْدِ إِسْمَاعِيلَ، وَمَنْ قَالَهَا حِينَ يُمْسِي كَانَ كَمَنْ أَعْتَقَ أَرْبَعَةً مِنْ وُلْدِ إِسْمَاعِيلَ»<br>
+      <strong>المصدر:</strong> رواه أحمد (23518) وصحيح الجامع (6431)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm4')">↺ صفر</button>
+      <span class="counter-num" id="count-sm4">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm4')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════
+       أذكار مشتركة للصباح والمساء
+  ══════════════════════════════ -->
+  <h2 class="section-title">﴿ أذكار الصباح والمساء ﴾</h2>
+
+  <!-- ٥ — اللهم إني أسألك العفو والعافية -->
+  <article class="wird-card" id="sm5">
+    <div class="card-header">
+      <div class="hadith-badge">اللهم إني أسألك العفو والعافية</div>
+      <span class="timing-badge">صباحاً ومساءً</span>
+    </div>
+    <div class="wird-text">
+      «اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> عبدالله بن عمر رضي الله عنهما — أن النبيَّ ﷺ كان يقول إذا أصبح وإذا أمسى<br>
+      <strong>المصدر:</strong> رواه أبو داود (5074) وابن ماجه (3871)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm5')">↺ صفر</button>
+      <span class="counter-num" id="count-sm5">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm5')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ٦ — بسم الله الذي لا يضر × ٣ -->
+  <article class="wird-card" id="sm6">
+    <div class="card-header">
+      <div class="hadith-badge">بسم الله الذي لا يضر</div>
+      <span class="timing-badge">صباحاً ومساءً × ٣</span>
+    </div>
+    <div class="wird-text">
+      «بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> عثمان بن عفان رضي الله عنه — قال النبيُّ ﷺ: «مَنْ قَالَهَا ثَلَاثَ مَرَّاتٍ حِينَ يُصْبِحُ وَحِينَ يُمْسِي لَمْ تُصِبْهُ فَجْأَةُ بَلَاءٍ حَتَّى يُصْبِحَ»<br>
+      <strong>المصدر:</strong> رواه أبو داود (5088) والترمذي (3388)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm6')">↺ صفر</button>
+      <span class="counter-num" id="count-sm6">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm6')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ٧ — رضيت بالله ربا × ٣ -->
+  <article class="wird-card" id="sm7">
+    <div class="card-header">
+      <div class="hadith-badge">رضيت بالله ربًّا</div>
+      <span class="timing-badge">صباحاً ومساءً × ٣</span>
+    </div>
+    <div class="wird-text">
+      «رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> ثوبان رضي الله عنه — قال النبيُّ ﷺ: «مَنْ قَالَهَا حِينَ يُصْبِحُ وَحِينَ يُمْسِي كَانَ حَقًّا عَلَى اللَّهِ أَنْ يُرْضِيَهُ يَوْمَ الْقِيَامَةِ»<br>
+      <strong>المصدر:</strong> رواه أبو داود (5072) والترمذي (3389)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm7')">↺ صفر</button>
+      <span class="counter-num" id="count-sm7">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm7')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ٨ — اللهم عافني في بدني × ٣ -->
+  <article class="wird-card" id="sm8">
+    <div class="card-header">
+      <div class="hadith-badge">اللهم عافني في بدني</div>
+      <span class="timing-badge">صباحاً ومساءً × ٣</span>
+    </div>
+    <div class="wird-text">
+      «اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> أبو بكرة نفيع بن الحارث رضي الله عنه — أنه كان يقولها إذا أصبح وإذا أمسى ثلاث مرات<br>
+      <strong>المصدر:</strong> رواه أبو داود (5090)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm8')">↺ صفر</button>
+      <span class="counter-num" id="count-sm8">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm8')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ٩ — حسبي الله × ٧ -->
+  <article class="wird-card" id="sm9">
+    <div class="card-header">
+      <div class="hadith-badge">حسبي الله لا إله إلا هو</div>
+      <span class="timing-badge">صباحاً ومساءً × ٧</span>
+    </div>
+    <div class="wird-text">
+      «حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> أبو الدرداء رضي الله عنه — قال النبيُّ ﷺ: «مَنْ قَالَهَا سَبْعَ مَرَّاتٍ حِينَ يُصْبِحُ وَسَبْعَ مَرَّاتٍ حِينَ يُمْسِي كَفَاهُ اللَّهُ مَا أَهَمَّهُ مِنْ أَمْرِ الدُّنْيَا وَالْآخِرَةِ»<br>
+      <strong>المصدر:</strong> رواه أبو داود (5081) وصحيح الجامع (4123)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm9')">↺ صفر</button>
+      <span class="counter-num" id="count-sm9">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm9')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ١٠ — سبحان الله وبحمده × ١٠٠ -->
+  <article class="wird-card" id="sm10">
+    <div class="card-header">
+      <div class="hadith-badge">سبحان الله وبحمده</div>
+      <span class="timing-badge">صباحاً ومساءً × ١٠٠</span>
+    </div>
+    <div class="wird-text">
+      «سُبْحَانَ اللَّهِ وَبِحَمْدِهِ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> أبو هريرة رضي الله عنه — قال النبيُّ ﷺ: «مَنْ قَالَ حِينَ يُصْبِحُ وَحِينَ يُمْسِي: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ مِائَةَ مَرَّةٍ؛ لَمْ يَأْتِ أَحَدٌ يَوْمَ الْقِيَامَةِ بِأَفْضَلَ مِمَّا جَاءَ بِهِ إِلَّا أَحَدٌ قَالَ مِثْلَ مَا قَالَ أَوْ زَادَ عَلَيْهِ»<br>
+      <strong>المصدر:</strong> رواه مسلم (2692)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm10')">↺ صفر</button>
+      <span class="counter-num" id="count-sm10">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm10')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ١١ — يا حي يا قيوم -->
+  <article class="wird-card" id="sm11">
+    <div class="card-header">
+      <div class="hadith-badge">يا حي يا قيوم</div>
+      <span class="timing-badge">صباحاً ومساءً</span>
+    </div>
+    <div class="wird-text">
+      «يَا حَيُّ يَا قَيُّومُ، بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ»
+    </div>
+    <div class="wird-ref">
+      <strong>الراوي:</strong> أنس بن مالك رضي الله عنه — قال النبيُّ ﷺ لفاطمة رضي الله عنها: «مَا يَمْنَعُكِ أَنْ تَسْمَعِي مَا أُوصِيكِ بِهِ؟ تَقُولِي إِذَا أَصْبَحْتِ وَإِذَا أَمْسَيْتِ...»<br>
+      <strong>المصدر:</strong> صحيح الترغيب (661) وصحيح الجامع (4388)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm11')">↺ صفر</button>
+      <span class="counter-num" id="count-sm11">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm11')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════
+       آية الكرسي
+  ══════════════════════════════ -->
+  <h2 class="section-title">﴿ آية الكرسي ﴾</h2>
+
+  <!-- ١٢ — آية الكرسي -->
+  <article class="wird-card" id="sm12">
+    <div class="card-header">
+      <div class="surah-badge">آية الكرسي — البقرة ٢٥٥</div>
+      <span class="timing-badge">صباحاً ومساءً</span>
+    </div>
+    <div class="verses">
+      <span class="verse-line">
+        اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ
+        <span class="verse-num">﴿٢٥٥﴾</span>
+      </span>
+    </div>
+    <div class="wird-ref">
+      <strong>الدليل:</strong> عن أبي أمامة رضي الله عنه — قال النبيُّ ﷺ: «مَنْ قَرَأَ آيَةَ الْكُرْسِيِّ دُبُرَ كُلِّ صَلَاةٍ مَكْتُوبَةٍ لَمْ يَمْنَعْهُ مِنْ دُخُولِ الْجَنَّةِ إِلَّا أَنْ يَمُوتَ» — وهي مُستحبَّة للقراءة صباحاً ومساءً<br>
+      <strong>المصدر:</strong> رواه النسائي في الكبرى (9928) والسلسلة الصحيحة (972)<br>
+      <span class="auth-badge">حديث صحيح</span>
+    </div>
+    <div class="counter-area">
+      <button class="counter-reset" onclick="resetCounter('sm12')">↺ صفر</button>
+      <span class="counter-num" id="count-sm12">٠</span>
+      <button class="counter-tap" onclick="tapCounter('sm12')">اضغط للعدّ</button>
+    </div>
+  </article>
+
+</main>
+
+<footer class="site-footer">أذكار الصباح والمساء · من هدي النبي ﷺ المأثور</footer>
+
+<button id="back-top" aria-label="العودة للأعلى">↑</button>
+
+<script>
+// ──────────────────────────────────
+// COUNTER
+// ──────────────────────────────────
+const counters = {};
+
+function tapCounter(id) {
+  if (!counters[id]) counters[id] = 0;
+  counters[id]++;
+  updateCountDisplay(id);
+  const btn = document.querySelector(`#${id} .counter-tap`);
+  if (btn) {
+    btn.style.transform = 'scale(0.94)';
+    setTimeout(() => { btn.style.transform = ''; }, 120);
+  }
+}
+function resetCounter(id) {
+  counters[id] = 0;
+  updateCountDisplay(id);
+}
+function updateCountDisplay(id) {
+  const el = document.getElementById(`count-${id}`);
+  if (el) el.textContent = toArabicNum(counters[id] || 0);
+}
+function toArabicNum(n) {
+  return n.toString().replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+}
+
+// ──────────────────────────────────
+// FONT SIZE
+// ──────────────────────────────────
+const FONT_SIZES = [
+  { label: 'صغير',  px: 18 },
+  { label: 'متوسط', px: 24 },
+  { label: 'كبير',  px: 30 },
+  { label: 'أكبر',  px: 36 }
+];
+let fontIdx = 1; // default: متوسط
+
+function applyFont() {
+  const f = FONT_SIZES[fontIdx];
+  document.documentElement.style.setProperty('--font-size-base', f.px + 'px');
+  document.getElementById('font-label').textContent = f.label;
+  document.getElementById('font-up').disabled   = (fontIdx === FONT_SIZES.length - 1);
+  document.getElementById('font-down').disabled = (fontIdx === 0);
+  localStorage.setItem('athkar-font', fontIdx);
+}
+document.getElementById('font-up').addEventListener('click', () => {
+  if (fontIdx < FONT_SIZES.length - 1) { fontIdx++; applyFont(); }
+});
+document.getElementById('font-down').addEventListener('click', () => {
+  if (fontIdx > 0) { fontIdx--; applyFont(); }
+});
+
+// ──────────────────────────────────
+// THEME: cream ↔ dark
+// ──────────────────────────────────
+let isDark = false;
+
+function applyTheme() {
+  if (isDark) {
+    document.body.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-toggle').textContent = '☀️';
+    document.getElementById('theme-toggle').title = 'وضع النهار';
+  } else {
+    document.body.removeAttribute('data-theme');
+    document.getElementById('theme-toggle').textContent = '🌙';
+    document.getElementById('theme-toggle').title = 'وضع الليل';
+  }
+  document.getElementById('swatch-cream').classList.toggle('active', !isDark);
+  document.getElementById('swatch-dark').classList.toggle('active', isDark);
+  localStorage.setItem('athkar-theme', isDark ? 'dark' : 'cream');
+}
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  isDark = !isDark;
+  applyTheme();
+});
+function setPillTheme(dark) {
+  isDark = dark;
+  applyTheme();
+}
+
+// ──────────────────────────────────
+// BACK TO TOP
+// ──────────────────────────────────
+const backBtn = document.getElementById('back-top');
+window.addEventListener('scroll', () => {
+  backBtn.classList.toggle('visible', window.scrollY > 400);
+});
+backBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ──────────────────────────────────
+// RESTORE PREFERENCES
+// ──────────────────────────────────
+function restorePrefs() {
+  const savedFont = parseInt(localStorage.getItem('athkar-font'));
+  if (!isNaN(savedFont) && savedFont >= 0 && savedFont < FONT_SIZES.length) {
+    fontIdx = savedFont;
+  }
+  const savedTheme = localStorage.getItem('athkar-theme');
+  if (savedTheme === 'dark') { isDark = true; }
+}
+
+// ──────────────────────────────────
+// INIT
+// ──────────────────────────────────
+restorePrefs();
+applyFont();
+applyTheme();
+</script>
+</body>
+</html>

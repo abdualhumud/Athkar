@@ -210,6 +210,44 @@
       padding: 20px 12px 60px;
     }
 
+    /* ─── Top page navigation ─── */
+    .page-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .nav-option {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 10px 16px;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: 0 3px 12px var(--shadow);
+      gap: 5px;
+      transition: background 0.2s, border-color 0.2s;
+      touch-action: manipulation;
+    }
+    .nav-option:active { background: var(--ref-bg); }
+    .nav-icon { font-size: 1.5rem; line-height: 1; }
+    .nav-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.3;
+    }
+    .nav-sub {
+      font-size: 0.48rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
     /* ─── Section heading ─── */
     .section-title {
       font-size: 0.85rem;
@@ -438,6 +476,20 @@
 </header>
 
 <main class="main">
+
+  <!-- ══ روابط التنقل العلوية ══ -->
+  <nav class="page-nav" aria-label="تنقل بين الصفحات">
+    <a href="index.html" class="nav-option">
+      <span class="nav-icon">📚</span>
+      <span class="nav-label">جوامع الأذكار</span>
+      <span class="nav-sub">٥٠ دعاءً مأثوراً</span>
+    </a>
+    <a href="sabah-masa.html" class="nav-option">
+      <span class="nav-icon">🌅</span>
+      <span class="nav-label">أذكار الصباح والمساء</span>
+      <span class="nav-sub">أذكار مأثورة للصباح والمساء</span>
+    </a>
+  </nav>
 
   <!-- ══════════════════════════════
        القرآن الكريم
