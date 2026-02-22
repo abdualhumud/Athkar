@@ -164,43 +164,44 @@
     }
     .theme-toggle:active { background: rgba(255,255,255,0.30); }
 
-    /* Inline theme pill */
-    .theme-pill {
-      display: inline-flex;
+    /* ─── Color swatch selector ─── */
+    .title-area {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      background: rgba(0,0,0,0.18);
-      border-radius: 20px;
-      padding: 3px;
-      gap: 2px;
-      flex-shrink: 0;
-      margin-top: 8px;
+      gap: 6px;
     }
-    .theme-pill-btn {
-      background: transparent;
-      border: none;
-      color: rgba(255,255,255,0.65);
-      border-radius: 17px;
-      padding: 5px 12px;
-      font-family: 'Amiri', serif;
-      font-size: 0.62rem;
-      cursor: pointer;
-      touch-action: manipulation;
-      transition: background 0.2s, color 0.2s;
-      white-space: nowrap;
-      user-select: none;
-    }
-    .theme-pill-btn.active {
-      background: rgba(255,255,255,0.22);
-      color: var(--header-fg);
-      font-weight: 700;
-    }
-    .theme-pill-btn:active { opacity: 0.8; }
-    .header-bottom-wird {
+    .color-selector {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      margin-top: 4px;
+      gap: 7px;
     }
+    .color-label {
+      font-size: 0.6rem;
+      color: var(--header-fg);
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+    .color-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: box-shadow 0.15s, transform 0.15s;
+      border: 2px solid transparent;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .swatch-cream { background: #FAF6F0; border-color: rgba(255,255,255,0.4); }
+    .swatch-dark  { background: #1A1612; border-color: rgba(255,255,255,0.25); }
+    .color-swatch.active {
+      box-shadow: 0 0 0 2.5px #fff;
+      transform: scale(1.18);
+    }
+    .color-swatch:active { opacity: 0.75; }
 
     /* ─── Main ─── */
     .main {
@@ -273,6 +274,9 @@
       text-align: center;
       margin-bottom: 4px;
     }
+    /* Basmala styled as verse 1 in Al-Fatiha */
+    .basmala-inline { color: var(--accent); font-weight: 700; }
+
     /* Each verse on its own line with number */
     .verse-line {
       display: block;
@@ -410,9 +414,19 @@
 <header class="site-header">
   <div class="header-top">
     <a href="index.html" class="back-link">&#8592; رجوع</a>
-    <div class="site-title">
-      الورد اليومي
-      <small>قرآن كريم وأذكار مأثورة</small>
+    <!-- Title + color swatches -->
+    <div class="title-area">
+      <div class="site-title">
+        الورد اليومي
+        <small>قرآن كريم وأذكار مأثورة</small>
+      </div>
+      <div class="color-selector">
+        <span class="color-label">اللون</span>
+        <button class="color-swatch swatch-cream active" id="swatch-cream"
+                onclick="setPillTheme(false)" title="كريمي" aria-label="الوضع الكريمي"></button>
+        <button class="color-swatch swatch-dark" id="swatch-dark"
+                onclick="setPillTheme(true)"  title="ليلي"  aria-label="الوضع الليلي"></button>
+      </div>
     </div>
     <div class="font-controls">
       <button class="font-btn" id="font-down" aria-label="تصغير الخط">أ−</button>
@@ -420,13 +434,6 @@
       <button class="font-btn" id="font-up"   aria-label="تكبير الخط">أ+</button>
     </div>
     <button class="theme-toggle" id="theme-toggle" aria-label="تبديل المظهر" title="ليلي / نهاري">🌙</button>
-  </div>
-  <!-- Theme pill row -->
-  <div class="header-bottom-wird">
-    <div class="theme-pill" id="theme-pill">
-      <button class="theme-pill-btn active" id="pill-cream" onclick="setPillTheme(false)">☀️ كريمي</button>
-      <button class="theme-pill-btn" id="pill-dark" onclick="setPillTheme(true)">🌙 ليلي</button>
-    </div>
   </div>
 </header>
 
@@ -442,17 +449,17 @@
     <div class="card-header">
       <div class="surah-badge">سورة الفاتحة</div>
     </div>
-    <div class="basmala">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
     <div class="verses">
-      <span class="verse-line">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ <span class="verse-num">﴿١﴾</span></span>
-      <span class="verse-line">الرَّحْمَنِ الرَّحِيمِ <span class="verse-num">﴿٢﴾</span></span>
-      <span class="verse-line">مَالِكِ يَوْمِ الدِّينِ <span class="verse-num">﴿٣﴾</span></span>
-      <span class="verse-line">إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ <span class="verse-num">﴿٤﴾</span></span>
-      <span class="verse-line">اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ <span class="verse-num">﴿٥﴾</span></span>
-      <span class="verse-line">صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ <span class="verse-num">﴿٦﴾</span></span>
+      <span class="verse-line basmala-v"><span class="basmala-inline">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span> <span class="verse-num">﴿١﴾</span></span>
+      <span class="verse-line">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ <span class="verse-num">﴿٢﴾</span></span>
+      <span class="verse-line">الرَّحْمَنِ الرَّحِيمِ <span class="verse-num">﴿٣﴾</span></span>
+      <span class="verse-line">مَالِكِ يَوْمِ الدِّينِ <span class="verse-num">﴿٤﴾</span></span>
+      <span class="verse-line">إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ <span class="verse-num">﴿٥﴾</span></span>
+      <span class="verse-line">اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ <span class="verse-num">﴿٦﴾</span></span>
+      <span class="verse-line">صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ <span class="verse-num">﴿٧﴾</span></span>
     </div>
     <div class="wird-ref">
-      <strong>السورة:</strong> الفاتحة · ٧ آيات (البسملة + ٦ آيات) · مكية · ركن الصلاة
+      <strong>السورة:</strong> الفاتحة · ٧ آيات · مكية · ركن الصلاة
     </div>
     <div class="counter-area">
       <button class="counter-reset" onclick="resetCounter('w1')">↺ صفر</button>
@@ -680,9 +687,9 @@ function applyTheme() {
     document.getElementById('theme-toggle').textContent = '🌙';
     document.getElementById('theme-toggle').title = 'وضع الليل';
   }
-  // Sync pill buttons
-  document.getElementById('pill-cream').classList.toggle('active', !isDark);
-  document.getElementById('pill-dark').classList.toggle('active', isDark);
+  // Sync color swatches
+  document.getElementById('swatch-cream').classList.toggle('active', !isDark);
+  document.getElementById('swatch-dark').classList.toggle('active', isDark);
   localStorage.setItem('athkar-theme', isDark ? 'dark' : 'cream');
 }
 document.getElementById('theme-toggle').addEventListener('click', () => {
