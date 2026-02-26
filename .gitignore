@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment variables — never commit secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+*.pfx
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Windows command artifacts
+nul
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
