@@ -300,26 +300,24 @@
       background: var(--counter-bg);
       color: var(--counter-fg);
       border: none;
-      border-radius: 16px;
-      padding: 14px 32px;
+      border-radius: 14px;
+      padding: 12px 22px;
       font-family: 'Amiri', serif;
-      font-size: 1.1rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
       touch-action: manipulation;
-      transition: transform 0.1s, opacity 0.15s;
+      transition: transform 0.1s;
       user-select: none;
-      min-width: 120px;
       text-align: center;
       box-shadow: 0 4px 12px var(--shadow);
+      flex-shrink: 0;
     }
     .counter-tap:active { transform: scale(0.96); }
     .counter-num {
-      font-size: 1.4rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--accent);
-      min-width: 48px;
-      text-align: center;
     }
     .counter-reset {
       background: var(--btn-reset);
@@ -332,8 +330,53 @@
       cursor: pointer;
       touch-action: manipulation;
       transition: opacity 0.15s;
+      flex-shrink: 0;
     }
     .counter-reset:active { opacity: 0.7; }
+
+    /* ─── Tappable text ─── */
+    .tappable {
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      border-radius: 12px;
+      transition: opacity 0.12s;
+    }
+    .tappable:active { opacity: 0.65; }
+
+    /* ─── Progress bar ─── */
+    .progress-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--counter-bg);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.25s ease;
+    }
+    .progress-fill.done { background: var(--accent2); }
+    .progress-info {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      font-family: 'Amiri', serif;
+    }
+    .progress-sep { color: var(--muted); font-size: 0.8em; }
+    .counter-max-label { color: var(--muted); font-size: 0.75em; }
 
     /* ─── Divider ─── */
     .divider {
@@ -820,15 +863,23 @@ function renderCards() {
       <div class="card-header">
         <div class="dua-num">${dua.id}</div>
       </div>
-      <div class="dua-text">${dua.text}</div>
+      <div class="dua-text tappable" onclick="tapCounter(${dua.id})">${dua.text}</div>
       <div class="dua-ref">
         <strong>الرواية:</strong> ${dua.narrator}<br>
         <strong>المصدر:</strong> ${dua.source}<br>
         <span class="authenticity-badge">${dua.auth}</span>
       </div>
       <div class="counter-area">
-        <button class="counter-reset" onclick="resetCounter(${dua.id})" aria-label="إعادة تعيين">↺ صفر</button>
-        <span class="counter-num" id="count-${dua.id}">٠</span>
+        <button class="counter-reset" onclick="resetCounter(${dua.id})" aria-label="إعادة تعيين">↺</button>
+        <div class="progress-wrapper" onclick="tapCounter(${dua.id})"
+             role="progressbar" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+          <div class="progress-track"><div class="progress-fill" id="fill-${dua.id}"></div></div>
+          <div class="progress-info">
+            <span class="counter-num" id="count-${dua.id}">٠</span>
+            <span class="progress-sep">/</span>
+            <span class="counter-max-label">٣</span>
+          </div>
+        </div>
         <button class="counter-tap" onclick="tapCounter(${dua.id})" aria-label="تسبيح">اضغط للعدّ</button>
       </div>
     `;
@@ -844,19 +895,26 @@ function renderCards() {
 // ─────────────────────────────────────────
 // COUNTER
 // ─────────────────────────────────────────
+const DUA_MAX = 3;
+
 function tapCounter(id) {
+  if (counters[id] >= DUA_MAX) return;
   counters[id]++;
   updateCountDisplay(id);
-  const btn = document.querySelector(`#dua-${id} .counter-tap`);
-  if (btn) {
-    btn.style.transform = 'scale(0.94)';
-    setTimeout(() => { btn.style.transform = ''; }, 120);
-  }
 }
 function resetCounter(id) { counters[id] = 0; updateCountDisplay(id); }
 function updateCountDisplay(id) {
-  const el = document.getElementById(`count-${id}`);
-  if (el) el.textContent = toArabicNum(counters[id]);
+  const count = counters[id] || 0;
+  const el    = document.getElementById(`count-${id}`);
+  const fill  = document.getElementById(`fill-${id}`);
+  const wrap  = fill && fill.closest('[role="progressbar"]');
+  if (el)   el.textContent = toArabicNum(count);
+  if (fill) {
+    const pct = Math.min((count / DUA_MAX) * 100, 100);
+    fill.style.width = pct + '%';
+    fill.classList.toggle('done', count >= DUA_MAX);
+  }
+  if (wrap) wrap.setAttribute('aria-valuenow', count);
 }
 function toArabicNum(n) {
   return n.toString().replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
